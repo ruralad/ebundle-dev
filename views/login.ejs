@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SignIn | eBundle</title>
+  </head>
+  <body>
+    <section class="section">
+      <form id="signinForm">
+        <label class="label">email</label>
+        <input type="email" placeholder="Email" name="email" id="email" />
+        <label class="label">password</label>
+        <input
+          type="password"
+          placeholder="password"
+          name="password"
+          id="password"
+        />
+        <button id="signin">
+          Create
+        </button>
+      </form>
+      <button id="signout">
+        SignOut
+      </button>
+    </section>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script src="/index/script.js" defer></script>
+    <script src="/index/auth.js" defer></script>
+  </body>
+</html>
