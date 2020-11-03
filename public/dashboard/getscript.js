@@ -11,22 +11,27 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    
+    document.querySelector("h1").innerHTML = "Hello " + user.displayName;
     firebase
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
       .then(function(idToken) {
-        fetch("/verify", {
+        fetch("/getData", {
           method: "GET",
           headers: {
             Authorization: idToken
           }
-        });
+        })
+          .then(response => response.json())
+          .then(data => {
+                console.log(data); 
+          });
       })
       .catch(function(error) {
-        // Handle error
+        console.log(error);
       });
-    console.log(user.displayName);
   } else {
-    console.log("signed out");
+    document.querySelector("h1").innerHTML = "Please Login";
   }
 });
