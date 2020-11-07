@@ -70,7 +70,9 @@ app.get("/login", (req, res) => {
   res.sendFile(__dirname + "/views/login.html");
 });
 
-//signup
+
+
+//---------------------------signup------------------------------------//
 app.post("/signup", (req, res) => {
   admin
     .auth()
@@ -139,19 +141,26 @@ app.post("/createNewClass", authenticateToken, (req, res) => {
     .catch(err => res.send("notCreated"));
 });
 
+
 app.get("/getData", authenticateToken, (req, res) => {
-  const uid = req.uid;
-  Student.exists({ firebaseUID: uid })
+  
+  
+
+ Teacher.exists({ firebaseUID: req.uid })
     .then(result => {
       if (result) {
-        Student.findOne({ firebaseUID: uid }).then(data => {
+      
+        Teacher.findOne({ firebaseUID: req.uid }).then(data => {
+          
+          res.send(data);
+        });
+      }else{
+        Student.findOne({firebaseUID:req.uid }).then(data=>{
+        
           res.send(data);
         });
       }
     })
-    .catch(err => {
-      console.log(err);
-    });
 });
 
 //gives the list of classes the teacher or student is currently enrolled in, if the classcode is given as authorization
@@ -175,6 +184,7 @@ app.get("/getClassData", (req, res) => {
     });
 });
 //-------------------------------------listener------------------------------------------//
+
 
 const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
