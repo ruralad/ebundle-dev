@@ -3,10 +3,14 @@ const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const router = express.Router();
-
 const app = express();
 
-app.set("view engine", "ejs");
+const pug = require("pug");
+const compiledFunction = pug.compileFile("./pugTemplates/classData.pug");
+
+//random code generator for classes
+const { customAlphabet } = require("nanoid");
+const randomClassCode = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 5);
 
 //firebase admin initialization
 const serviceAccount = require("./util/serviceAccountKey.json");
@@ -15,7 +19,7 @@ admin.initializeApp({
   databaseURL: "https://ebundle-dev.firebaseio.com"
 });
 
-//mongodb
+//mongodb connection
 const dbURI =
   "mongodb+srv://ebundleDEVS:devsofebundle@cluster0.dc5cp.mongodb.net/ebundle?retryWrites=true&w=majority";
 mongoose
@@ -24,6 +28,7 @@ mongoose
     console.log("connected to db");
   });
 
+//db initialization
 const Teacher = require("./db/teacher");
 const Student = require("./db/student");
 const Class = require("./db/class");
@@ -34,14 +39,27 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+function authenticateToken(req, res, next) {
+  admin
+    .auth()
+    .verifyIdToken(req.headers.authorization)
+    .then(function(decodedToken) {
+      req.uid = decodedToken.uid;
+      next();
+    })
+    .catch(err => {
+      res.send("notVerified");
+    });
+}
+
 //----------------------------------------CODE--------------------------------------------------------//
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.sendFile(__dirname + "/views/index.html");
 });
 
 app.get("/dashboard", (req, res) => {
-  res.render("dashboard");
+  res.sendFile(__dirname + "/views/dashboard.html");
 });
 
 app.get("/signup", (req, res) => {
@@ -49,7 +67,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.sendFile(__dirname + "/views/login.html");
 });
 
 //signup
@@ -67,7 +85,8 @@ app.post("/signup", (req, res) => {
         const teacher = new Teacher({
           name: req.body.name,
           email: req.body.email,
-          firebaseUID: userRecord.uid
+          firebaseUID: userRecord.uid,
+          role: "teacher"
         });
         teacher
           .save()
@@ -79,19 +98,15 @@ app.post("/signup", (req, res) => {
         const student = new Student({
           name: req.body.name,
           email: req.body.email,
-          firebaseUID: userRecord.uid
+          firebaseUID: userRecord.uid,
+          role: "student"
         });
         student
           .save()
           .then(result => {
-            console.log("Mangoose : student document created");
+            res.redirect("/login");
           })
           .catch(err => console.log(err));
-        console.log(
-          "Fauth : Successfully created new student:",
-          userRecord.uid
-        );
-        res.send("yeeeeeeeeee student");
       }
     })
     .catch(function(error) {
@@ -100,65 +115,67 @@ app.post("/signup", (req, res) => {
     });
 });
 
-app.get("/verify", (req, res) => {
-  admin
-    .auth()
-    .verifyIdToken(req.headers.authorization)
-    .then(function(decodedToken) {
-      const uid = decodedToken.uid;
-      admin
-        .auth()
-        .getUser(uid)
-        .then(function(userRecord) {
-          // See the UserRecord reference doc for the contents of userRecord.
-          res.send({
-            message: "verified"
-          });
-          console.log("verified");
-        })
-        .catch(function(error) {
-          console.log("Error fetching user data:", error);
-        });
-    })
-    .catch(function(error) {
-      res.send("not verified");
-      console.log("couldnt verify the token");
-    });
-});
-app.get("/getData", (req, res) => {
-  admin
-    .auth()
-    .verifyIdToken(req.headers.authorization)
-    .then(function(decodedToken) {
-      const uid = decodedToken.uid;
-      Student.exists({ firebaseUID: uid })
-        .then(result => {
-          if (result) {
-            Student.findOne({ firebaseUID: uid }).then(data => {
-              res.send(data);
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    })
-    .catch(function(error) {
-      res.send("not verified");
-      console.log("couldnt verify the token");
-    });
-});
-
 //---------------------------------------api---------------------------------------------//
 
-app.post("/createclass",(req,res)=>{
-  const newClass = new Class({
-    className : req.body.name,
-    description : req.body.desc
-  });
-  newClass.save().then((result)=>res.redirect("/classes/")).catch(err=>console.log(err));
+app.post("/createNewClass", authenticateToken, (req, res) => {
+  Teacher.exists({ firebaseUID: req.uid })
+    .then(result => {
+      if (result) {
+        const newClass = new Class({
+          className: req.body.name,
+          classDesc: req.body.desc,
+          classCreatedBy: req.body.createdBy,
+          classTeachers: [req.body.createdBy],
+          classCode: randomClassCode()
+        });
+        newClass
+          .save()
+          .then(result => res.send("created"))
+          .catch(err => res.send("notCreated"));
+      } else {
+        res.send("notAuthorized");
+      }
+    })
+    .catch(err => res.send("notCreated"));
+});
+
+app.get("/getData", authenticateToken, (req, res) => {
+  const uid = req.uid;
+  Student.exists({ firebaseUID: uid })
+    .then(result => {
+      if (result) {
+        Student.findOne({ firebaseUID: uid }).then(data => {
+          res.send(data);
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+//gives the list of classes the teacher or student is currently enrolled in, if the classcode is given as authorization
+app.get("/getClassData", (req, res) => {
+  Class.exists({ _id: req.headers.authorization })
+    .then(result => {
+      if (result) {
+        Class.findOne({ _id: req.headers.authorization }).then(data => {
+          let returnData = compiledFunction({
+            data: data
+          });
+          res.json({
+            "html" : returnData,
+            "classCode" : data._id
+          });
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 //-------------------------------------listener------------------------------------------//
+
 const listener = app.listen(process.env.PORT, () => {
   console.log("Your app is listening on port " + listener.address().port);
 });

@@ -15,7 +15,6 @@ firebase.auth().onAuthStateChanged(function(user) {
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
       .then(function(idToken) {
-        document.cookie = "auth="+idToken+"; expires=Wed, 28 Oct 2020 12:00:00 UTC; SameSite=None; Secure"; 
         fetch("/verify", {
           method: "GET",
           headers: {

@@ -7,19 +7,28 @@ const classSchema = new Schema(
       type: String,
       required: true
     },
-    createdOn: {
+    classCreatedBy: {
+      type: String,
+      required: true
+    },
+    classCreatedOn: {
       type: Date,
       default: Date.now()
     },
-    description: {
+    classCode: {
+      type: String,
+      required: true
+    },
+
+    classDesc: {
       type: String
     },
-    teachers: [
+    classTeachers: [
       {
         type: String
       }
     ],
-    students: [
+    classStudents: [
       {
         email: {
           type: String,
@@ -27,7 +36,7 @@ const classSchema = new Schema(
         }
       }
     ],
-    assignments: [
+    classAssignments: [
       {
         title: {
           type: String,
