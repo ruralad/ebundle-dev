@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## The All-In-One Learning Platform
 
 You can use the [editor on GitHub](https://github.com/ruralad/ebundle-dev/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
 
