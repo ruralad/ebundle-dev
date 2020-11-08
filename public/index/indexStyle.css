@@ -1,0 +1,140 @@
+body {
+  background-color: #0000;
+  font-size: 20px;
+  font-family: "Segoe UI";
+}
+
+header {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+a{
+  text-decoration:none;
+  curdoe:pointer;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 90vh;
+}
+/* h1 {
+  font-size: 3rem;
+}
+p {
+  margin-top: -20px;
+}
+ */
+.animate {
+  animation: showslowly 2s ease;
+}
+@keyframes showslowly {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+
+.dialog {
+  position: fixed;
+  display: none;
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+.dialog.show-dialog {
+  display: block;
+  background: rgba(19, 38, 57, 0.9);
+}
+.dialog.show-dialog .modal-md {
+  right: 0;
+  left: 0;
+  margin: 10% auto 50px;
+  max-width: 635px;
+  width: 100%;
+  background: white;
+  padding: 0;
+  z-index: 100;
+  border-radius: 3px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  -webkit-animation: dialog-scale-start .3s ease-in-out forwards;
+          animation: dialog-scale-start .3s ease-in-out forwards;
+}
+.dialog h1 {
+  padding: 30px;
+  color: #336699;
+  background: #ecf2f9;
+  border-radius: 3px 3px 0 0;
+  font-size: 24px;
+  margin: 0;
+  position: relative;
+}
+.dialog h1 .close {
+  position: absolute;
+  right: 20px;
+  top: 15px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.dialog .modal-content {
+  padding: 30px;
+}
+
+@-webkit-keyframes dialog-scale-start {
+  0% {
+    opacity: .5;
+    -webkit-transform: scale(1.15);
+            transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+
+@keyframes dialog-scale-start {
+  0% {
+    opacity: .5;
+    -webkit-transform: scale(1.15);
+            transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: auto;
+  width: 100%;
+}
+form input,
+button {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+form button {
+  cursor: pointer;
+}

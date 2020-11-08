@@ -1,3 +1,54 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home | eBundle</title>
+    <link rel="stylesheet" href="/index/indexStyle.css">
+  </head>
+  <body>
+    <header>
+      <a href="#" id="loginLink">login</a>
+    </header>
+    <main>
+      <h1>
+        eBundle
+      </h1>
+      <p>
+        the all in one learning platform
+      </p>
+      <div class="dialog">
+    <div class="modal-md">
+      <h1>
+        Login
+        <span class="close">×</span>
+      </h1>
+      <div class="modal-content">
+        <section class="section">
+      <form id="signinForm">
+        <input type="email" placeholder="Email" name="email" id="email" />
+        <input
+          type="password"
+          placeholder="Password"
+          name="password"
+          id="password"
+        />
+        <button id="signin">
+          Sign In
+        </button>
+      </form>
+    </section>
+      </div>
+    </div>
+  </div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script src="/index/indexScript.js" defer></script>
+  </body>
+</html>
+ -->
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,6 +57,25 @@
     <title>Home | eBundle</title>
   </head>
   <body>
+    <section>
+      <form id="signinForm1">
+        <label class="label">Subject Name</label>
+        <input type="text" placeholder="sub name" name="name" id="name" />
+         <label class="label">Desc</label>
+        <input type="text" placeholder="description" name="desc" id="desc" />
+        <button id="signup">
+          Create class
+        </button>
+      </form>
+      <button id="signout">
+        SignOut
+      </button>
+    </section>
     
+    
+    
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+    <script src="index/indexScript.js"></script>
   </body>
 </html>

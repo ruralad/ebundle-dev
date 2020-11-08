@@ -1,30 +1,37 @@
-const mongoose=require("mongoose");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const teacherSchema = new Schema({
-  name:{
-    type : String,
-    required : true
-  },
-  email:{
-    type : String,
-    required : true
-  },
-  firebaseUID:{
-    type : String,
-    required : true
-  },
-  college:{
-    type : String,
-    // required : true
+const teacherSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true
     },
-  classes : [
-    {
-      className:String,
-      password : String
-    }
-  ]
-},{timestamps:true});
+    email: {
+      type: String,
+      required: true
+    },
+    firebaseUID: {
+      type: String,
+      required: true
+    },
+    role: {
+      type: String,
+      required: true
+    },
+    college: {
+      type: String
+      // required : true
+    },
+    classes: [
+      {
+        className: String,
+        password: String
+      }
+    ]
+  },
+  { timestamps: true }
+);
 
 const Teacher = mongoose.model("Teacher", teacherSchema);
 module.exports = Teacher;

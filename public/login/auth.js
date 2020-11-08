@@ -20,10 +20,12 @@ firebase.auth().onAuthStateChanged(function(user) {
           headers: {
             Authorization: idToken
           }
-        });
+        })
+          .then((response)=>response.json())
+          .then((data)=>console.log(data.message));
       })
       .catch(function(error) {
-        // Handle error
+       console.log(error);
       });
   } else {
     console.log("signed out");
