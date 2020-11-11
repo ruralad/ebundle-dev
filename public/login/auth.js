@@ -11,22 +11,7 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    firebase
-      .auth()
-      .currentUser.getIdToken(/* forceRefresh */ true)
-      .then(function(idToken) {
-        fetch("/verify", {
-          method: "GET",
-          headers: {
-            Authorization: idToken
-          }
-        })
-          .then((response)=>response.json())
-          .then((data)=>console.log(data.message));
-      })
-      .catch(function(error) {
-       console.log(error);
-      });
+    window.location = "/c"
   } else {
     console.log("signed out");
   }

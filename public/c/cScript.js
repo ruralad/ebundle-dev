@@ -9,6 +9,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+let classes = document.getElementById("classes");
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -33,6 +34,41 @@ firebase.auth().onAuthStateChanged(function(user) {
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Student";
+            }
+
+            let iterateCount = 0;
+
+            for (
+              iterateCount;
+              iterateCount < data.classes.length;
+              iterateCount++
+            ) {
+              let currentClass = data.classes[iterateCount];
+              let currentClassCode = "";
+              let i = 0;
+              while (currentClass[i] != null) {
+                currentClassCode = currentClassCode + currentClass[i];
+                i++;
+              }
+
+              fetch("/api/getClassData", {
+                method: "GET",
+                headers: {
+                  Authorization: currentClassCode
+                }
+              })
+                .then(response => response.json())
+                .then(data => {
+                  let a = document.createElement("a");
+                  a.setAttribute("href", "/c/" + data.classCode);
+
+                  let div = document.createElement("div");
+                  div.classList.add("class-rectangle");
+                  div.innerHTML = data.html;
+
+                  a.appendChild(div);
+                  classes.appendChild(a);
+                });
             }
           });
       })
