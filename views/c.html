@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Classes | eBundle</title>
+    <link rel="stylesheet" href="/common.css" />
     <link rel="stylesheet" href="/skeleton.css" />
     <link rel="stylesheet" href="/c/cStyle.css" />
   </head>
   <body>
+   
     <nav class="menu" tabindex="0">
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
@@ -17,7 +19,11 @@
       </header>
       <hr />
       <ul>
-        <li tabindex="0" class="icon-classes current-active" onclick="goto('c')">
+        <li
+          tabindex="0"
+          class="icon-classes current-active"
+          onclick="goto('c')"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 24 24"
@@ -101,8 +107,14 @@
           <h2>
             Your Classes
           </h2>
+          <div class="join-create-class">
+            <span>+</span>
+            <p id="joinOrCreate">
+              Join Class
+            </p>
+          </div>
         </div>
-        <hr>
+        <hr />
         <div class="class-section" id="classes"></div>
       </section>
     </main>

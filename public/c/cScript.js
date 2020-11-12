@@ -31,9 +31,16 @@ firebase.auth().onAuthStateChanged(function(user) {
             console.log(data);
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
+              document.querySelector("#joinOrCreate").innerText = "Join Class";
+              document.querySelector(".join-create-class").style.display = "flex";
+              document.querySelector(".join-create-class").addEventListener("click",()=>{
+                console.log("join class");
+              })
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Student";
+              document.querySelector("#joinOrCreate").innerText = "Create Class";
+              document.querySelector(".join-create-class").style.display = "flex";
             }
 
             let iterateCount = 0;
