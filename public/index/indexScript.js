@@ -14,7 +14,7 @@ firebase.initializeApp(firebaseConfig);
 // let dialog = document.getElementsByClassName("dialog")[0];
 // let closeBtn = document.getElementsByClassName("close")[0];
 
-  let currentUser = null
+let currentUser = null;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     currentUser = user;
@@ -63,50 +63,22 @@ form.addEventListener("submit", e => {
   let val1 = form.elements["name"].value;
   let val2 = form.elements["desc"].value;
   firebase
-      .auth()
-      .currentUser.getIdToken(/* forceRefresh */ true)
-      .then(async function(idToken){
-    fetch("/createNewClass", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization":idToken
-    },
-    body: JSON.stringify({
-      "name": val1,
-      "desc": val2,
-      createdBy : currentUser.email
-    })
-  }).then(data => {
-    console.log(data);
-  });
-  })
-    
-  
-  
-  // const user = firebase.auth().currentUser;
-  // if (user) {
-  //   firebase
-  //     .auth()
-  //     .currentUser.getIdToken(/* forceRefresh */ true)
-  //     .then(async function(idToken) {
-  //       fetch("/createNewClass", {
-  //         method: "POST",
-  //         headers: {
-  //           Authorization: idToken
-  //         },
-  //         body: {
-  //           name: val1,
-  //           desc: val2,
-  //           createdBy: user.email
-  //         }
-  //       }).then(data => {
-  //         console.log(data);
-  //       });
-  //     })
-  //     .catch(function(error) {
-  //       console.log(error);
-  //     });
-  // } else {
-  // }
+    .auth()
+    .currentUser.getIdToken(/* forceRefresh */ true)
+    .then(async function(idToken) {
+      fetch("/api/createNewClass", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: idToken
+        },
+        body: JSON.stringify({
+          name: val1,
+          desc: val2,
+          createdBy: currentUser.email
+        })
+      }).then(data => {
+        console.log(data);
+      });
+    });
 });

@@ -3,12 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard | eBundle</title>
+    <title>Classes | eBundle</title>
     <link rel="stylesheet" href="/common.css" />
     <link rel="stylesheet" href="/skeleton.css" />
-    <link rel="stylesheet" href="/dashboard/dashboardStyle.css" />
+    <link rel="stylesheet" href="/c/cStyle.css" />
   </head>
   <body>
+   
     <nav class="menu" tabindex="0">
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
@@ -18,11 +19,15 @@
       </header>
       <hr />
       <ul>
-        <li tabindex="0" class="icon-classes" onclick="goto('c')">
+        <li
+          tabindex="0"
+          class="icon-classes current-active"
+          onclick="goto('c')"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 24 24"
-            fill="#949494"
+            fill="#3FFF52"
             width="18px"
             height="18px"
           >
@@ -32,11 +37,11 @@
             /></svg
           ><span>Classes</span>
         </li>
-        <li tabindex="0" class="icon-dashboard current-active" onclick="goto('dashboard')">
+        <li tabindex="0" class="icon-dashboard" onclick="goto('dashboard')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 24 24"
-            fill="#3FFF52"
+            fill="#949494"
             width="18px"
             height="18px"
           >
@@ -100,10 +105,16 @@
       <section>
         <div class="content-header">
           <h2>
-            Dashboard
+            Your Classes
           </h2>
+          <div class="join-create-class">
+            <span>+</span>
+            <p id="joinOrCreate">
+              Join Class
+            </p>
+          </div>
         </div>
-        <hr>
+        <hr />
         <div class="class-section" id="classes"></div>
       </section>
     </main>
@@ -115,6 +126,6 @@
     </main> -->
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
-    <script src="/dashboard/dashboardScript.js" defer></script>
+    <script src="/c/cScript.js" defer></script>
   </body>
 </html>

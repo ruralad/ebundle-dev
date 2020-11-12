@@ -9,111 +9,33 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-let classes = document.getElementById("classes");
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
- //document.querySelector("h1").innerHTML = "Hello " + user.displayName ;
+    document.querySelector("#user-name").innerText = user.displayName;
+    document.querySelector("#user-avatar").src =
+      "https://ui-avatars.com/api/?background=random&name=" + user.displayName;
     firebase
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
       .then(function(idToken) {
-        
-        fetch("/getData", {
+        fetch("/api/getData", {
           method: "GET",
           headers: {
             Authorization: idToken
           }
         })
           .then(response => response.json())
-        .then(data=>{
-          if(data.role == "teacher"){
-        document.querySelector("h1").innerHTML = "Hello " + user.displayName  + " " +data.role;
-           
-
-            let iterateCount = 0;
-
-            for (
-              iterateCount;
-              iterateCount < data.classes.length;
-              iterateCount++
-            ) {
-              let currentClass = data.classes[iterateCount];
-              let currentClassCode = "";
-              let i = 0;
-              while (currentClass[i] != null) {
-                currentClassCode = currentClassCode + currentClass[i];
-                i++;
-
-              }
-             
-              fetch("/getClassData", {
-                method: "GET",
-                headers: {
-                  Authorization: currentClassCode
-                }
-              })
-              .then(response => response.json())
-        
-              .then(data => {
-                let button = document.createElement("button");
-                button.classList.add("create-button");
-                button.innerHTML="CREATE CLASS";
-    
-                
-
-
-                //------class-details-------------//
-                let div = document.createElement("div");
-                div.classList.add("classRectangle")
-                div.innerHTML = data.html;
-                let a = document.createElement("a");
-                a.setAttribute("href","/classes/" + data.classCode)
-                a.appendChild(div);
-                classes.appendChild(a);
-              });
-            }
-          }
-          else{
-            document.querySelector("h1").innerHTML = "Hello " + user.displayName  + " " +data.role;
+          .then(data => {
             console.log(data);
-            let iterateCount = 0;
-
-            for (
-              iterateCount;
-              iterateCount < data.classes.length;
-              iterateCount++
-            ) {
-              let currentClass = data.classes[iterateCount];
-              let currentClassCode = "";
-              let i = 0;
-              while (currentClass[i] != null) {
-                currentClassCode = currentClassCode + currentClass[i];
-                i++;
-
-              }
-             
-              fetch("/getClassData", {
-                method: "GET",
-                headers: {
-                  Authorization: currentClassCode
-                }
-              })
-              .then(response => response.json())
-              .then(data => {
-                let div = document.createElement("div");
-                div.classList.add("classRectangle")
-                div.innerHTML = data.html;
-                let a = document.createElement("a");
-                a.setAttribute("href","/classes/" + data.classCode)
-                a.appendChild(div);
-                classes.appendChild(a);
-              });
+            if (data.role == "student") {
+              document.querySelector("#user-role").innerText = "Student";
+              document.querySelector(".avatar").style.opacity = 1;
+            } else if (data.role == "teacher") {
+              document.querySelector("#user-role").innerText = "Student";
             }
-         } });
-          
-          
-      })     
+          });
+      })
       .catch(function(error) {
         console.log(error);
       });
@@ -121,3 +43,8 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.querySelector("h1").innerHTML = "Please Login";
   }
 });
+
+function goto(to){
+  if(to == "c") window.location = "/c"
+  else window.location = "/c/" + to
+}
