@@ -11,8 +11,10 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
-    // window.location = "/c";
-    console.log(user.emailVerified)
+    // if(!user.emailVerified) window.location="/account/verifyemail";
+    // else 
+      window.location="/c";
+    // console.log(user.emailVerified);
   } else {
     console.log("not logged in");
   }
@@ -37,36 +39,28 @@ document.getElementById("signUpButton").addEventListener("click", e => {
   let name = document.getElementById("userName").value;
   let email = document.getElementById("userMail").value;
   let password = document.getElementById("userPasswordConfirm").value;
-  firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password)
-    .then(user => {
-      console.log(user.email);
-      user
-        .updateProfile({
-          displayName: name
-        })
-        .then(function() {
-          console.log("updateProfile");
-        })
-        .catch(function(error) {
-          console.log("couldnt");
-        });
+  let role;
 
-      user
-        .sendEmailVerification()
-        .then(function() {
-          console.log("sendverification");
-        })
-        .catch(function(error) {
-          console.log("couldnt send verification mail");
-        });
-    })
-    .catch(error => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ..
-    });
+  if (document.getElementById("studentRadio").checked)
+    role = document.getElementById("studentRadio").value;
+  else if (document.getElementById("teacherRadio").checked)
+    role = document.getElementById("teacherRadio").value;
+  let stuff = JSON.stringify({
+    name,
+    email,
+    password,
+    role
+  });
+
+  fetch("/api/signup", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: stuff
+  })
+    .then(response => response.json())
+    .then(data => console.log(data));
 });
 
 const signOutButton = document.getElementById("signoutButton");
@@ -78,3 +72,7 @@ signOutButton.addEventListener("click", () => {
       console.log(error);
     });
 });
+
+function createUser() {
+  console.log("hi");
+}
