@@ -34,8 +34,7 @@ const Teacher = require("./db/teacher");
 const Student = require("./db/student");
 const Class = require("./db/class");
 
-
-const {authenticateToken,signUp} = require("./api/authentication")
+const { authenticateToken } = require("./api/authentication");
 
 //------------------------------------Middlewares--------------------------------------------//
 
@@ -49,17 +48,18 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
-
 app.get("/signup", (req, res) => {
   res.redirect("../login");
 });
 app.get("/login", (req, res) => {
-    res.redirect("../account");
+  res.redirect("../account");
 });
 app.get("/account", (req, res) => {
   res.sendFile(__dirname + "/views/loginsignup/login.html");
 });
-
+app.get("/account/verifyemail", (req, res) => {
+  res.sendFile(__dirname + "/views/loginsignup/verifyemail.html");
+});
 
 app.get("/c", (req, res) => {
   res.sendFile(__dirname + "/views/c.html");
@@ -69,31 +69,84 @@ app.get("/c/dashboard", (req, res) => {
   res.sendFile(__dirname + "/views/dashboard.html");
 });
 
-app.get("/c/:id",(req,res)=>{
+app.get("/c/:id", (req, res) => {
   res.sendFile(__dirname + "/views/individualClass.html");
 });
+
 //---------------------------------------api---------------------------------------------//
 
 //signup
 app.post("/api/signup", (req, res) => {
-  signUp(req,res); // function is at api/authentication.js
+  // signUp(req,res); // function is at api/authentication.js
+
+  admin
+    .auth()
+    .createUser({
+      displayName: req.body.name,
+      email: req.body.email,
+      password: req.body.password
+    })
+    .then(function(userRecord) {
+      console.log(userRecord);
+      if (req.body.role == "teacher") {
+        const teacher = new Teacher({
+          name: req.body.name,
+          email: req.body.email,
+          firebaseUID: userRecord.uid,
+          role: "teacher"
+        });
+        teacher
+          .save()
+          .then(result => {
+            res.json({
+              response: "created"
+            });
+          })
+          .catch(err => console.log(err));
+      } else {
+        const student = new Student({
+          name: req.body.name,
+          email: req.body.email,
+          firebaseUID: userRecord.uid,
+          role: "student"
+        });
+        student
+          .save()
+          .then(result => {
+            res.json({
+              response: "created"
+            });
+          })
+          .catch(err => console.log(err));
+      }
+    })
+    .catch(function(error) {
+      console.log("Error creating new user:", error);
+      res.send("ooh ooh");
+    });
 });
 
 //create a new class, if the requested user is a teacher
 app.post("/api/createNewClass", authenticateToken, (req, res) => {
   Teacher.exists({ firebaseUID: req.uid })
     .then(result => {
+      let newClassCode = randomClassCode();
       if (result) {
         const newClass = new Class({
           className: req.body.name,
           classDesc: req.body.desc,
           classCreatedBy: req.body.createdBy,
           classTeachers: [req.body.createdBy],
-          classCode: randomClassCode()
+          classCode: newClassCode
         });
         newClass
           .save()
-          .then(result => res.send("created"))
+          .then(result => {
+            Teacher.findOne({ firebaseUID: req.uid }, function(err, docs) {
+              docs.classes.push(result._id);
+              docs.save().then(res.send("created"));
+            });
+          })
           .catch(err => res.send("notCreated"));
       } else {
         res.send("notAuthorized");
@@ -102,7 +155,30 @@ app.post("/api/createNewClass", authenticateToken, (req, res) => {
     .catch(err => res.send("notCreated"));
 });
 
-//send all the data from their document, based on their role(teacher or student) 
+//join a new class, if the requested user is a student
+//NOTFINISHED-------------------------------------------------------------------------!!!!
+app.post("/api/joinClass", authenticateToken, (req, res) => {
+  Student.exists({ firebaseUID: req.uid })
+    .then(result => {
+      if (result) {
+        Class.findOne({classCode:req.body.classCode},function(err,classDocs){
+          Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
+          docs.classes.push(classDocs._id);
+          docs.save().then(res.send("joined"));
+        });
+        })
+        Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
+          docs.classes.push(result._id);
+          docs.save().then(res.send("created"));
+        });
+      } else {
+        res.send("notAuthorized");
+      }
+    })
+    .catch(err => res.send("notCreated"));
+});
+
+//send all the data from their document, based on their role(teacher or student)
 app.get("/api/getData", authenticateToken, (req, res) => {
   Teacher.exists({ firebaseUID: req.uid }).then(result => {
     if (result) {
@@ -144,7 +220,8 @@ app.get("/api/getCompleteClassData", (req, res) => {
       if (result) {
         Class.findOne({ _id: req.headers.authorization }).then(data => {
           res.json({
-            data});
+            data
+          });
         });
       }
     })
