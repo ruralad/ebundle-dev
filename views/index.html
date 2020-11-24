@@ -55,9 +55,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Home | eBundle</title>
+     <link rel="stylesheet" href="/index/indexStyle.css">
+    <style>
+    </style>
   </head>
   <body>
-    <section>
+    <!---     create class        -->
+<button class="open-button" onclick="openForm()">Create Class</button>
+
+<div class="form-popup" id="myForm">
+  <form action="/" class="form-container" id="signinForm1">
+    <h1>Create class</h1>
+
+    <label for="className"><b>Class Name</b></label>
+    <input type="text" placeholder="Enter class Name" name="name" id="name" class="name" required>
+
+    <label for="desc"><b>Description</b></label>
+    <input type="textarea" name="desc" id="desc" class="desc" required>
+    
+    <button type="submit" class="btn">Create</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+    <section id="classes"></section>
+    
+    <!--     <section>
       <form id="signinForm1">
         <label class="label">Subject Name</label>
         <input type="text" placeholder="sub name" name="name" id="name" />
@@ -71,11 +93,12 @@
         SignOut
       </button>
     </section>
-    
+    -->
     
     
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
-    <script src="index/indexScript.js"></script>
+    <script src="index/indexScript.js"></script> 
+    
   </body>
 </html>

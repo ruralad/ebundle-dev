@@ -49,13 +49,17 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/views/index.html");
 });
 
+
 app.get("/signup", (req, res) => {
-  res.sendFile(__dirname + "/views/signup.html");
+  res.redirect("../login");
+});
+app.get("/login", (req, res) => {
+    res.redirect("../account");
+});
+app.get("/account", (req, res) => {
+  res.sendFile(__dirname + "/views/loginsignup/login.html");
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/views/login.html");
-});
 
 app.get("/c", (req, res) => {
   res.sendFile(__dirname + "/views/c.html");
@@ -63,6 +67,10 @@ app.get("/c", (req, res) => {
 
 app.get("/c/dashboard", (req, res) => {
   res.sendFile(__dirname + "/views/dashboard.html");
+});
+
+app.get("/c/:id",(req,res)=>{
+  res.sendFile(__dirname + "/views/individualClass.html");
 });
 //---------------------------------------api---------------------------------------------//
 
@@ -110,7 +118,7 @@ app.get("/api/getData", authenticateToken, (req, res) => {
 });
 
 //gives the list of classes the teacher or student is currently enrolled in, classcode is given as authorization
-app.get("/api/getClassData", (req, res) => {
+app.get("/api/getPartialClassData", (req, res) => {
   Class.exists({ _id: req.headers.authorization })
     .then(result => {
       if (result) {
@@ -122,6 +130,21 @@ app.get("/api/getClassData", (req, res) => {
             html: returnData,
             classCode: data._id
           });
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.get("/api/getCompleteClassData", (req, res) => {
+  Class.exists({ _id: req.headers.authorization })
+    .then(result => {
+      if (result) {
+        Class.findOne({ _id: req.headers.authorization }).then(data => {
+          res.json({
+            data});
         });
       }
     })

@@ -18,6 +18,16 @@ let currentUser = null;
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     currentUser = user;
+    if (!user.emailVerified) {
+      user
+        .sendEmailVerification()
+        .then(function() {
+          // Email sent.
+        })
+        .catch(function(error) {
+          // An error happened.
+        });
+    }
     // link.setAttribute("href", "/dashboard");
     // link.classList.toggle("animate");
     // link.innerHTML = user.displayName;
@@ -28,6 +38,14 @@ firebase.auth().onAuthStateChanged(function(user) {
     console.log("signed out");
   }
 });
+/*----------- pop up form -------*/
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
 
 // function toggleShowDialog() {
 //   dialog.classList.toggle("show-dialog");
@@ -80,5 +98,18 @@ form.addEventListener("submit", e => {
       }).then(data => {
         console.log(data);
       });
+
+      //---------- display the classname and description ---------//
+
+      fetch("/api/getPartialClassData", {
+        method: "GET",
+        headers: {
+          Authorization: idToken
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+        });
     });
 });
