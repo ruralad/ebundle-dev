@@ -14,7 +14,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
-      "https://ui-avatars.com/api/?background=random&name=" + user.displayName;
+      "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
     firebase
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
@@ -32,7 +32,7 @@ firebase.auth().onAuthStateChanged(function(user) {
               document.querySelector("#user-role").innerText = "Student";
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
-              document.querySelector("#user-role").innerText = "Student";
+              document.querySelector("#user-role").innerText = "Teacher";
             }
           });
       })

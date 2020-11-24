@@ -19,7 +19,6 @@ const classSchema = new Schema(
       type: String,
       required: true
     },
-
     classDesc: {
       type: String
     },
@@ -36,7 +35,9 @@ const classSchema = new Schema(
         }
       }
     ],
-    classAssignments: [
+    
+    //assignments
+    assignments: [
       {
         title: {
           type: String,
@@ -45,15 +46,40 @@ const classSchema = new Schema(
         description: {
           type: String
         },
+        file:[{
+          url:String
+        }],
         createDate: {
           type: Date,
           default: Date.now()
         },
         dueDate: {
           type: Date
-        }
+        },
+        comments:[{
+          name:String,
+          message : String
+        }],
+        submissions:[{
+          email:String,
+          roll: Number,
+          submittedOn : Date,
+          fileUrl : String
+        }]
       }
-    ]
+    ],
+    
+    //posts
+    posts:[{
+      title:String,
+      desc:String,
+      fileUrl : String,
+      comments:[{
+          name:String,
+          message : String
+        }]
+    }],
+    
   },
   { timestamps: true }
 );

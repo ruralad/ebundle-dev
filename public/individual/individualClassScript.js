@@ -9,7 +9,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-let classes = document.getElementById("classes");
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
@@ -28,37 +27,21 @@ firebase.auth().onAuthStateChanged(function(user) {
         })
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
-              document.querySelector("#joinOrCreate").innerText = "Join Class";
-              document.querySelector(".join-create-class").style.display = "flex";
-              document.querySelector(".join-create-class").addEventListener("click",()=>{
-                console.log("join class");
-              })
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Teacher";
-              document.querySelector("#joinOrCreate").innerText = "Create Class";
-              document.querySelector(".join-create-class").style.display = "flex";
             }
-
-            let iterateCount = 0;
-
-            for (
-              iterateCount;
-              iterateCount < data.classes.length;
-              iterateCount++
-            ) {
-              let currentClass = data.classes[iterateCount];
-              let currentClassCode = "";
-              let i = 0;
-              while (currentClass[i] != null) {
-                currentClassCode = currentClassCode + currentClass[i];
-                i++;
-              }
-
-              fetch("/api/getPartialClassData", {
+          });
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    
+    //getclass data
+    let currentClassCode = window.location.pathname.slice(3);
+     fetch("/api/getCompleteClassData", {
                 method: "GET",
                 headers: {
                   Authorization: currentClassCode
@@ -66,22 +49,9 @@ firebase.auth().onAuthStateChanged(function(user) {
               })
                 .then(response => response.json())
                 .then(data => {
-                  let a = document.createElement("a");
-                  a.setAttribute("href", "/c/" + data.classCode);
-
-                  let div = document.createElement("div");
-                  div.classList.add("class-rectangle");
-                  div.innerHTML = data.html;
-
-                  a.appendChild(div);
-                  classes.appendChild(a);
+                  console.log(data.data);
+                 document.querySelector("#class-name").innerText = data.data.className;
                 });
-            }
-          });
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
   } else {
     document.querySelector("h1").innerHTML = "Please Login";
   }

@@ -25,8 +25,7 @@ const studentSchema = new Schema(
     },
     classes: [
       {
-        className: String,
-        password: String
+        classId: String
       }
     ]
   },

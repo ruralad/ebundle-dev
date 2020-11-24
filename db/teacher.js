@@ -26,7 +26,8 @@ const teacherSchema = new Schema(
     classes: [
       {
         className: String,
-        password: String
+        classCode: String,
+        classId: String
       }
     ]
   },
