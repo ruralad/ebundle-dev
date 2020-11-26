@@ -46,5 +46,5 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function goto(to){
   if(to == "c") window.location = "/c"
-  else window.location = "/c/" + to
+  else window.location = "/" + to
 }

@@ -11,12 +11,20 @@ firebase.initializeApp(firebaseConfig);
 
 let classes = document.getElementById("classes");
 
+function goto(to) {
+  if (to == "c") window.location = "/c";
+  else window.location = "/" + to;
+}
+
+let currentUser;
+
+//load initial stuff for classes
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
+    currentUser = user;
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
       "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
-    document.querySelector(".avatar").style.opacity = "1";
     firebase
       .auth()
       .currentUser.getIdToken(/* forceRefresh */ true)
@@ -29,18 +37,26 @@ firebase.auth().onAuthStateChanged(function(user) {
         })
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
               document.querySelector("#joinOrCreate").innerText = "Join Class";
-              document.querySelector(".join-create-class").style.display = "flex";
-              document.querySelector(".join-create-class").addEventListener("click",()=>{
-                console.log("join class");
-              })
+              document.querySelector(".join-create-class").style.display =
+                "flex";
+              document.querySelector(".avatar").style.opacity = "1";
+
+              document
+                .querySelector(".join-create-class")
+                .addEventListener("click", () => {
+                  console.log("join class");
+                });
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Teacher";
-              document.querySelector("#joinOrCreate").innerText = "Create Class";
-              document.querySelector(".join-create-class").style.display = "flex";
+              document.querySelector("#joinOrCreate").innerText =
+                "Create Class";
+              document.querySelector("#joinOrCreate").href = "#open-create";
+              document.querySelector(".join-create-class").style.display =
+                "flex";
+              document.querySelector(".avatar").style.opacity = "1";
             }
 
             let iterateCount = 0;
@@ -50,14 +66,7 @@ firebase.auth().onAuthStateChanged(function(user) {
               iterateCount < data.classes.length;
               iterateCount++
             ) {
-              let currentClass = data.classes[iterateCount];
-              let currentClassCode = "";
-              let i = 0;
-              while (currentClass[i] != null) {
-                currentClassCode = currentClassCode + currentClass[i];
-                i++;
-              }
-
+              let currentClassCode = data.classes[iterateCount]._id;
               fetch("/api/getPartialClassData", {
                 method: "GET",
                 headers: {
@@ -65,13 +74,13 @@ firebase.auth().onAuthStateChanged(function(user) {
                 }
               })
                 .then(response => response.json())
-                .then(data => {
+                .then(classData => {
                   let a = document.createElement("a");
-                  a.setAttribute("href", "/c/" + data.classCode);
+                  a.setAttribute("href", "/c/" + classData.classCode);
 
                   let div = document.createElement("div");
                   div.classList.add("class-rectangle");
-                  div.innerHTML = data.html;
+                  div.innerHTML = classData.html;
 
                   a.appendChild(div);
                   classes.appendChild(a);
@@ -87,7 +96,36 @@ firebase.auth().onAuthStateChanged(function(user) {
   }
 });
 
-function goto(to){
-  if(to == "c") window.location = "/c"
-  else window.location = "/c/" + to
-}
+//create new class (only for teachers)
+document.querySelector("#createClassButton").addEventListener("click", e => {
+  e.preventDefault();
+  document.querySelector("#createClassButton").style.pointerEvents = "none";
+  let val1 = document.querySelector("#newClassName").value;
+  let val2 = document.querySelector("#newClassDescription").value;
+  console.log(JSON.stringify({
+          name: val1,
+          desc: val2,
+          createdBy: currentUser.email
+        }));
+  firebase
+    .auth()
+    .currentUser.getIdToken(/* forceRefresh */ true)
+    .then(async function(idToken) {
+      fetch("/api/createNewClass", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: idToken
+        },
+        body: JSON.stringify({
+          name: val1,
+          desc: val2,
+          createdBy: currentUser.email
+        })
+      })
+        .then(response => response.json())
+        .then(returnData => {
+        if(returnData.response == "created") window.location = "/c/" + returnData.id;
+      });
+    });
+});
