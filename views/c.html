@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/c/cStyle.css" />
   </head>
   <body>
-   
     <nav class="menu" tabindex="0">
       <div class="smartphone-menu-trigger"></div>
       <header class="avatar">
@@ -108,23 +107,29 @@
           </h2>
           <div class="join-create-class">
             <span>+</span>
-            <p id="joinOrCreate">
-              Join Class
-            </p>
+            <a class="btn"  id="joinOrCreate"></a>
           </div>
         </div>
         <hr />
         <div class="class-section" id="classes"></div>
       </section>
     </main>
-    <!--     <main>
-      <h1>
-      </h1>
-      <section id="classes">
-      </section>
-    </main> -->
-    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+
+    <div id="open-create" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close">Close</a>
+        <div class="create-form">
+        <input type="text" id="newClassName" placeholder="class name eg: Theory Of Computation ">
+        <input type="text" id="newClassDescription" placeholder="description eg: CS307 Semester 5">
+        <button id="createClassButton">
+          Create
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
     <script src="/c/cScript.js" defer></script>
   </body>
 </html>

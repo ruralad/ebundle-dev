@@ -64,15 +64,24 @@ app.get("/account/verifyemail", (req, res) => {
 app.get("/c", (req, res) => {
   res.sendFile(__dirname + "/views/c.html");
 });
-
-app.get("/c/dashboard", (req, res) => {
-  res.sendFile(__dirname + "/views/dashboard.html");
-});
-
 app.get("/c/:id", (req, res) => {
   res.sendFile(__dirname + "/views/individualClass.html");
 });
 
+
+app.get("/dashboard", (req, res) => {
+  res.sendFile(__dirname + "/views/dashboard.html");
+});
+
+
+app.get("/works", (req, res) => {
+  res.sendFile(__dirname + "/views/works.html");
+});
+
+
+app.get("/exams", (req, res) => {
+  res.sendFile(__dirname + "/views/exams.html");
+});
 //---------------------------------------api---------------------------------------------//
 
 //signup
@@ -144,15 +153,18 @@ app.post("/api/createNewClass", authenticateToken, (req, res) => {
           .then(result => {
             Teacher.findOne({ firebaseUID: req.uid }, function(err, docs) {
               docs.classes.push(result._id);
-              docs.save().then(res.send("created"));
+              docs.save().then(res.json({
+              response: "created",
+              id : result._id
+            }));
             });
           })
-          .catch(err => res.send("notCreated"));
+          .catch(err => res.send("notCreated : broken at adding code to teacher"));
       } else {
         res.send("notAuthorized");
       }
     })
-    .catch(err => res.send("notCreated"));
+    .catch(err => res.send("notCreated : couldnt form new class doc"));
 });
 
 //join a new class, if the requested user is a student

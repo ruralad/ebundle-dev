@@ -32,6 +32,7 @@ firebase.auth().onAuthStateChanged(function(user) {
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Teacher";
+              document.querySelector(".avatar").style.opacity = 1;
             }
           });
       })
@@ -51,6 +52,7 @@ firebase.auth().onAuthStateChanged(function(user) {
                 .then(data => {
                   console.log(data.data);
                  document.querySelector("#class-name").innerText = data.data.className;
+               document.title = data.data.className + " | eBundle"
                 });
   } else {
     document.querySelector("h1").innerHTML = "Please Login";
@@ -59,5 +61,5 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 function goto(to){
   if(to == "c") window.location = "/c"
-  else window.location = "/c/" + to
+  else window.location = "/" + to
 }
