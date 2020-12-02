@@ -1,234 +1,104 @@
-/*
-body {
-  background-color: #0000;
-  font-size: 20px;
-  font-family: "Segoe UI";
-}
-
-header {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-}
-a{
-  text-decoration:none;
-  curdoe:pointer;
-}
-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  width: 100%;
-  height: 90vh;
-}
-/* h1 {
-  font-size: 3rem;
-}
-p {
-  margin-top: -20px;
-}
- */
-/*
-.animate {
-  animation: showslowly 2s ease;
-}
-@keyframes showslowly {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-
-
-.dialog {
-  position: fixed;
-  display: none;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 5;
-}
-.dialog.show-dialog {
-  display: block;
-  background: rgba(19, 38, 57, 0.9);
-}
-.dialog.show-dialog .modal-md {
-  right: 0;
-  left: 0;
-  margin: 10% auto 50px;
-  max-width: 635px;
-  width: 100%;
-  background: white;
-  padding: 0;
-  z-index: 100;
-  border-radius: 3px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-  -webkit-animation: dialog-scale-start .3s ease-in-out forwards;
-          animation: dialog-scale-start .3s ease-in-out forwards;
-}
-.dialog h1 {
-  padding: 30px;
-  color: #336699;
-  background: #ecf2f9;
-  border-radius: 3px 3px 0 0;
-  font-size: 24px;
-  margin: 0;
-  position: relative;
-}
-.dialog h1 .close {
-  position: absolute;
-  right: 20px;
-  top: 15px;
-  cursor: pointer;
-  font-size: 20px;
-}
-.dialog .modal-content {
-  padding: 30px;
-}
-
-@-webkit-keyframes dialog-scale-start {
-  0% {
-    opacity: .5;
-    -webkit-transform: scale(1.15);
-            transform: scale(1.15);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
-  }
-}
-
-@keyframes dialog-scale-start {
-  0% {
-    opacity: .5;
-    -webkit-transform: scale(1.15);
-            transform: scale(1.15);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: scale(1);
-            transform: scale(1);
-  }
-}
-section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  height: auto;
-  width: 100%;
-}
-form input,
-button {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500&display=swap");
+* {
   box-sizing: border-box;
 }
-form button {
+
+body {
+  font-family: "Raleway", sans-serif;
+  overflow-y : hidden;
+}
+a{
+  text-decoration : none;
+  color : inherit;
+}
+.container {
+  width: 1170px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin: auto;
+}
+
+.landing-page {
+  position: relative;
+  background-color: #FFF;
+}
+
+.landing-page .header-area {
+  display: flex;
+  padding: 25px 0 0;
+  position: relative;
+}
+
+.landing-page .header-area .logo {
+  margin-top: 10px;
+  font-size: 22px;
+  width: 300px;
+  color: #5d5d5d;
+}
+
+.landing-page .header-area .links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: right;
+}
+
+.landing-page .header-area .links li {
+  display: inline-block;
+  margin-left: 30px;
+  color: #5d5d5d;
   cursor: pointer;
 }
-*/
 
+.landing-page .header-area .links li:last-child {
+  border: 0;
+  border-radius: 20px;
+  padding: 10px 18px;
+  color: #FFF;
+  background-color: #3FFF52;
+}
 
-/* --------------  pop up form -----------*/
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
+.landing-page .info {
+  width: 45%;
+  float: left;
+  margin-top: 160px;
+}
 
-/* Button used to open the contact form - fixed at the bottom of the page */
-.open-button {
-  background-color: #555;
-  color: white;
-  padding: 16px 20px;
-  border: none;
+.landing-page .info h1 {
+  font-size: 44px;
+  margin: 0 0 20px;
+  color: #5d5d5d;
+}
+
+.landing-page .info p {
+  width: 70%;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 15px;
+  color: #5d5d5d;
+}
+
+.landing-page .info button {
+  border: 0;
+  border-radius: 20px;
+  padding: 12px 30px;
+  margin-top: 30px;
   cursor: pointer;
-  opacity: 0.8;
-  position: fixed;
- 
-  right: 28px;
-  width: 280px;
+  color: #FFF;
+  background-color: #3FFF52;
 }
 
-/* The popup form - hidden by default */
-.form-popup {
-  position: fixed;
-  display : flex;
-  justify-content : center;
-  align-items : center;
-  
-  width:100%;
-  height:100%;
-  
-  z-index: 9;
+.landing-page .image {
+  width: 50%;
+  float: right;
+  margin-top: 35px;
+}
+.landing-page .image svg {
+  margin-left: 45px;
+  max-width: 80%;
 }
 
-/* Add styles to the form container */
-.form-container {
-  max-width: 400px;
-  padding: 10px;
-  background-color: #F3F3F3;
-  
-  border: 2px solid #1a1a1a;
-  border-radius : 5px;
-  
-}
-
-/* Full-width input fields */
-.form-container input[type=text], .form-container input[type=password] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: white;
-}
-
-.form-container input[type=textarea] {
-  width: 100%;
-  padding: 15px;
-  margin: 5px 0 22px 0;
-  border: none;
-  background: #f1f1f1;
-}
-
-/* When the inputs get focus, do something */
-.form-container input{
-  
-  background-color: #ddd;
-}
-.form-container input[type=text]:focus, .form-container input[type=password]:focus {
-  outline: none;
-}
-
-/* Set a style for the submit/login button */
-.form-container .btn {
-  background-color: #4CAF50;
-  color: white;
-  padding: 16px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom:10px;
-  opacity: 0.8;
-}
-
-/* Add a red background color to the cancel button */
-.form-container .cancel {
-  background-color: red;
-}
-
-/* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover {
-  opacity: 1;
+.clearfix {
+  clear: both;
 }

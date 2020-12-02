@@ -9,9 +9,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
+  if (!user) {
+    window.location = "/account";
+  } else {
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
       "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
@@ -39,27 +40,25 @@ firebase.auth().onAuthStateChanged(function(user) {
       .catch(function(error) {
         console.log(error);
       });
-    
+
     //getclass data
     let currentClassCode = window.location.pathname.slice(3);
-     fetch("/api/getCompleteClassData", {
-                method: "GET",
-                headers: {
-                  Authorization: currentClassCode
-                }
-              })
-                .then(response => response.json())
-                .then(data => {
-                  console.log(data.data);
-                 document.querySelector("#class-name").innerText = data.data.className;
-               document.title = data.data.className + " | eBundle"
-                });
-  } else {
-    document.querySelector("h1").innerHTML = "Please Login";
+    fetch("/api/getCompleteClassData", {
+      method: "GET",
+      headers: {
+        Authorization: currentClassCode
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.data);
+        document.querySelector("#class-name").innerText = data.data.className;
+        document.title = data.data.className + " | eBundle";
+      });
   }
 });
 
-function goto(to){
-  if(to == "c") window.location = "/c"
-  else window.location = "/" + to
+function goto(to) {
+  if (to == "c") window.location = "/c";
+  else window.location = "/" + to;
 }

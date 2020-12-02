@@ -20,7 +20,9 @@ let currentUser;
 
 //load initial stuff for classes
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
+  if (!user) {
+    window.location = "/account";
+  } else {
     currentUser = user;
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
@@ -91,8 +93,6 @@ firebase.auth().onAuthStateChanged(function(user) {
       .catch(function(error) {
         console.log(error);
       });
-  } else {
-    document.querySelector("h1").innerHTML = "Please Login";
   }
 });
 
@@ -102,11 +102,13 @@ document.querySelector("#createClassButton").addEventListener("click", e => {
   document.querySelector("#createClassButton").style.pointerEvents = "none";
   let val1 = document.querySelector("#newClassName").value;
   let val2 = document.querySelector("#newClassDescription").value;
-  console.log(JSON.stringify({
-          name: val1,
-          desc: val2,
-          createdBy: currentUser.email
-        }));
+  console.log(
+    JSON.stringify({
+      name: val1,
+      desc: val2,
+      createdBy: currentUser.email
+    })
+  );
   firebase
     .auth()
     .currentUser.getIdToken(/* forceRefresh */ true)
@@ -125,7 +127,8 @@ document.querySelector("#createClassButton").addEventListener("click", e => {
       })
         .then(response => response.json())
         .then(returnData => {
-        if(returnData.response == "created") window.location = "/c/" + returnData.id;
-      });
+          if (returnData.response == "created")
+            window.location = "/c/" + returnData.id;
+        });
     });
 });

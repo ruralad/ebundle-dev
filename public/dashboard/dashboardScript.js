@@ -9,9 +9,10 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-
 firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
+  if (!user) {
+    window.location = "/account";
+  } else {
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
       "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
@@ -39,12 +40,10 @@ firebase.auth().onAuthStateChanged(function(user) {
       .catch(function(error) {
         console.log(error);
       });
-  } else {
-    document.querySelector("h1").innerHTML = "Please Login";
   }
 });
 
-function goto(to){
-  if(to == "c") window.location = "/c"
-  else window.location = "/" + to
+function goto(to) {
+  if (to == "c") window.location = "/c";
+  else window.location = "/" + to;
 }
