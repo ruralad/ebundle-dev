@@ -161,3 +161,18 @@ h3 {
 80% { -webkit-transform:rotate(-300deg); }
 100% { -webkit-transform:rotate(-360deg); }
 }
+.add-stuff::after{
+  position : absolute;
+  display : inline;
+  content : '+';
+  font-size:35px;
+  margin-top : -12px;
+  margin-left : 5px;
+  cursor : pointer;
+  
+  transition : all .2s ease-out;
+}
+.add-stuff:hover::after{
+  margin-top : -15px;
+    font-size:40px;
+}
