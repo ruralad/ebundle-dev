@@ -68,16 +68,13 @@ app.get("/c/:id", (req, res) => {
   res.sendFile(__dirname + "/views/individualClass.html");
 });
 
-
 app.get("/dashboard", (req, res) => {
   res.sendFile(__dirname + "/views/dashboard.html");
 });
 
-
 app.get("/works", (req, res) => {
   res.sendFile(__dirname + "/views/works.html");
 });
-
 
 app.get("/exams", (req, res) => {
   res.sendFile(__dirname + "/views/exams.html");
@@ -153,13 +150,17 @@ app.post("/api/createNewClass", authenticateToken, (req, res) => {
           .then(result => {
             Teacher.findOne({ firebaseUID: req.uid }, function(err, docs) {
               docs.classes.push(result._id);
-              docs.save().then(res.json({
-              response: "created",
-              id : result._id
-            }));
+              docs.save().then(
+                res.json({
+                  response: "created",
+                  id: result._id
+                })
+              );
             });
           })
-          .catch(err => res.send("notCreated : broken at adding code to teacher"));
+          .catch(err =>
+            res.send("notCreated : broken at adding code to teacher")
+          );
       } else {
         res.send("notAuthorized");
       }
@@ -173,12 +174,15 @@ app.post("/api/joinClass", authenticateToken, (req, res) => {
   Student.exists({ firebaseUID: req.uid })
     .then(result => {
       if (result) {
-        Class.findOne({classCode:req.body.classCode},function(err,classDocs){
+        Class.findOne({ classCode: req.body.classCode }, function(
+          err,
+          classDocs
+        ) {
           Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
-          docs.classes.push(classDocs._id);
-          docs.save().then(res.send("joined"));
+            docs.classes.push(classDocs._id);
+            docs.save().then(res.send("joined"));
+          });
         });
-        })
         Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
           docs.classes.push(result._id);
           docs.save().then(res.send("created"));
@@ -234,6 +238,29 @@ app.get("/api/getCompleteClassData", (req, res) => {
           res.json({
             data
           });
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+
+app.post("/api/newClassPost", (req, res) => {
+  console.log(req.body);
+  Class.exists({ _id: req.headers.authorization })
+    .then(result => {
+      if (result) {
+        Class.findOne({ _id: req.headers.authorization }, function(err, docs) {
+          docs.posts.unshift({
+            text: req.body.newtext,
+            fileUrl: req.body.fileUrl,
+            date: req.body.date,
+            postedBy: req.body.postedBy
+          });
+          docs.save().then(res.json({
+            message : "newPostAdded"
+          }));
         });
       }
     })

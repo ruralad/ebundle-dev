@@ -9,10 +9,19 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+function goto(to) {
+  if (to == "c") window.location = "/c";
+  else window.location = "/" + to;
+}
+
+let currentClassCode = window.location.pathname.slice(3);
+let currentUser;
+
 firebase.auth().onAuthStateChanged(function(user) {
   if (!user) {
     window.location = "/account";
   } else {
+    currentUser = user;
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
       "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
@@ -41,8 +50,6 @@ firebase.auth().onAuthStateChanged(function(user) {
         console.log(error);
       });
 
-    //getclass data
-    let currentClassCode = window.location.pathname.slice(3);
     fetch("/api/getCompleteClassData", {
       method: "GET",
       headers: {
@@ -54,11 +61,118 @@ firebase.auth().onAuthStateChanged(function(user) {
         console.log(data.data);
         document.querySelector("#class-name").innerText = data.data.className;
         document.title = data.data.className + " | eBundle";
+
+        data.data.posts.forEach((item, index) => {
+          let newDiv = document.createElement("div");
+          newDiv.classList.add("post");
+
+          let postHeader = document.createElement("div");
+          postHeader.classList.add("post-header");
+
+          let profile = document.createElement("div");
+          profile.classList.add("profile");
+
+          let profileAvatar = document.createElement("img");
+          profileAvatar.classList.add("profile-avatar");
+          profile.appendChild(profileAvatar);
+
+          let profileName = document.createElement("div");
+          profileAvatar.classList.add("profile-name");
+          profileName.innerText = item.postedBy;
+          profile.appendChild(profileName);
+
+          let postDate = document.createElement("div");
+          postDate.classList.add("profile-date");
+          postDate.innerText = item.date;
+          profile.appendChild(postDate);
+
+          postHeader.appendChild(profile);
+
+          let postType = document.createElement("div");
+          postHeader.classList.add("post-type");
+          postDate.innerText = "Study Material";
+          postHeader.appendChild(postType);
+
+          newDiv.appendChild(postHeader);
+
+          let postContent = document.createElement("div");
+          postContent.classList.add("post-content");
+          let postContentPara = document.createElement("p");
+          postContentPara.innerText = item.text;
+          postContent.appendChild(postContentPara);
+
+          newDiv.appendChild(postContent);
+
+          document.querySelector(".class-posts").appendChild(newDiv);
+        });
       });
   }
 });
 
-function goto(to) {
-  if (to == "c") window.location = "/c";
-  else window.location = "/" + to;
-}
+document.querySelector("#newPostSubmit").addEventListener("click", () => {
+  let newtext = document.querySelector("#newPostText").value;
+  let fileUrl = "none";
+
+  let d = new Date();
+  let date = d.getDate() + "/" + (d.getMonth() + 1);
+
+  fetch("/api/newClassPost", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: currentClassCode
+    },
+    body: JSON.stringify({
+      newtext,
+      fileUrl,
+      date,
+      postedBy: currentUser.displayName
+    })
+  })
+    .then(response => response.json())
+    .then(data => {
+      if ((data.message = "newPostAdded")) {
+        let newDiv = document.createElement("div");
+        newDiv.classList.add("post");
+
+        let postHeader = document.createElement("div");
+        postHeader.classList.add("post-header");
+
+        let profile = document.createElement("div");
+        profile.classList.add("profile");
+
+        let profileAvatar = document.createElement("img");
+        profileAvatar.classList.add("profile-avatar");
+        profile.appendChild(profileAvatar);
+
+        let profileName = document.createElement("div");
+        profileAvatar.classList.add("profile-name");
+        profileName.innerText = currentUser.displayName;
+        profile.appendChild(profileName);
+
+        let postDate = document.createElement("div");
+        postDate.classList.add("profile-date");
+        postDate.innerText = date;
+        profile.appendChild(postDate);
+
+        postHeader.appendChild(profile);
+
+        let postType = document.createElement("div");
+        postHeader.classList.add("post-type");
+        postDate.innerText = "Study Material";
+        postHeader.appendChild(postType);
+
+        newDiv.appendChild(postHeader);
+
+        let postContent = document.createElement("div");
+        postContent.classList.add("post-content");
+        let postContentPara = document.createElement("p");
+        postContentPara.innerText = newtext;
+        postContent.appendChild(postContentPara);
+
+        newDiv.appendChild(postContent);
+
+        document.querySelector(".class-posts").appendChild(newDiv);
+      }
+    });
+});

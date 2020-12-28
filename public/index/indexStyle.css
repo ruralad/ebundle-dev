@@ -5,11 +5,11 @@
 
 body {
   font-family: "Raleway", sans-serif;
-  overflow-y : hidden;
+  overflow-y: hidden;
 }
-a{
-  text-decoration : none;
-  color : inherit;
+a {
+  text-decoration: none;
+  color: inherit;
 }
 .container {
   width: 1170px;
@@ -49,6 +49,7 @@ a{
   margin-left: 30px;
   color: #5d5d5d;
   cursor: pointer;
+  text-transform: lowercase;
 }
 
 .landing-page .header-area .links li:last-child {
@@ -57,8 +58,27 @@ a{
   padding: 10px 18px;
   color: #FFF;
   background-color: #3FFF52;
+  transition: all 0.2s ease-out;
+  cursor: pointer;
 }
-
+.pop-account {
+  display: none;
+  position: absolute;
+  top: 3.2rem;
+  right: 0.2rem;
+}
+.pop-account ul {
+  list-style: none;
+  text-align: right;
+}
+.pop-account li {
+  margin-top: 6px;
+  cursor: pointer;
+  transition: all 0.1s ease-out;
+}
+.pop-account li:hover {
+  font-weight: 700;
+}
 .landing-page .info {
   width: 45%;
   float: left;
@@ -101,4 +121,36 @@ a{
 
 .clearfix {
   clear: both;
+}
+
+/*typing effect*/
+h1 span.typed-text {
+  color: #3FFF52;
+}
+h1 span.cursor {
+  display: inline-block;
+  background-color: #ccc;
+  margin-left: 0.1rem;
+  width: 3px;
+  animation: blink 1s infinite;
+}
+h1 span.cursor.typing {
+  animation: none;
+}
+@keyframes blink {
+  0% {
+    background-color: #ccc;
+  }
+  49% {
+    background-color: #ccc;
+  }
+  50% {
+    background-color: transparent;
+  }
+  99% {
+    background-color: transparent;
+  }
+  100% {
+    background-color: #ccc;
+  }
 }

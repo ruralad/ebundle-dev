@@ -71,8 +71,9 @@ const classSchema = new Schema(
     
     //posts
     posts:[{
-      title:String,
-      desc:String,
+      text:String,
+      date : String,
+      postedBy : String,
       fileUrl : String,
       comments:[{
           name:String,

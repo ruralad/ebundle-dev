@@ -102,13 +102,7 @@ document.querySelector("#createClassButton").addEventListener("click", e => {
   document.querySelector("#createClassButton").style.pointerEvents = "none";
   let val1 = document.querySelector("#newClassName").value;
   let val2 = document.querySelector("#newClassDescription").value;
-  console.log(
-    JSON.stringify({
-      name: val1,
-      desc: val2,
-      createdBy: currentUser.email
-    })
-  );
+  
   firebase
     .auth()
     .currentUser.getIdToken(/* forceRefresh */ true)

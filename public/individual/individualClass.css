@@ -11,6 +11,7 @@ h3 {
   font-size: 17px;
 }
 .class-body {
+  font-size : 15px;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -42,6 +43,7 @@ h3 {
 }
 
 .post {
+  
   background: #FFFFFF;
   width: 90%;
   min-height: 100px;
@@ -52,6 +54,8 @@ h3 {
 
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.13);
+  
+  margin-top : 20px;
 }
 .post-header {
   margin-top:10px;
@@ -89,4 +93,86 @@ h3 {
 
   background: #F3F3F3;
   border-radius: 15px;
+}
+
+.new-post {
+  width : 90%;
+  margin-top : 20px;
+  margin-bottom : 20px;
+  
+  display :flex;
+  flex-direction : column;
+}
+.new-post textarea{
+  font-family: "Raleway", sans-serif;
+}
+.new-post .text-area{
+  background : white;
+  width : 500px;
+  min-height : 50px;
+  border-radius : 5px;
+  
+  margin-bottom : 10px;
+  transition : all 1s ease-out;
+}
+.new-post input {
+  width:80px;
+  cursor : pointer;
+  
+  border : 1px solid #ccc;
+  border-radius : 5px;
+  
+  color: var(--text-black);
+}
+.new-post input:active{
+  cursor:not-allowed;
+  transform : scale(0.95);
+  
+}
+.line{
+  height: 2px;
+  width:100%;
+  background-color: #ccc;
+  opacity: 0.4;
+  border: none;
+  margin-bottom : 20px;
+}
+.text-area[contenteditable]:empty::before {
+  content: "write a new post";
+  color: gray;
+  margin-left : 10px;
+}
+.new-post input:active + .loading-circle{
+  display :inline;
+}
+.loading-circle{
+  display : none;
+  width:10px;
+  height:10px;
+  border-radius:20px;
+  background : #F3F3F3;
+  border : 2px solid #ccc;
+  
+  border-right-color : #F3F3F3;
+  animation : turn 1.3s infinite ease-out;
+}
+@keyframes turn{
+  0% { -webkit-transform:rotate(0deg); }
+80% { -webkit-transform:rotate(-300deg); }
+100% { -webkit-transform:rotate(-360deg); }
+}
+.add-stuff::after{
+  position : absolute;
+  display : inline;
+  content : '+';
+  font-size:35px;
+  margin-top : -12px;
+  margin-left : 5px;
+  cursor : pointer;
+  
+  transition : all .2s ease-out;
+}
+.add-stuff:hover::after{
+  margin-top : -15px;
+    font-size:40px;
 }

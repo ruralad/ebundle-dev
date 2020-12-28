@@ -12,16 +12,20 @@ firebase.initializeApp(firebaseConfig);
 firebase.auth().onAuthStateChanged(function(user) {
   if (user) {
     // if(!user.emailVerified) window.location="/account/verifyemail";
-    // else 
-      window.location="/c";
+    // else
+    window.location = "/c";
     // console.log(user.emailVerified);
   } else {
     console.log("not logged in");
   }
 });
+document.querySelector(".logo").addEventListener("click", () => {
+  window.location = "/";
+});
 
-document.getElementById("inButton").addEventListener("click", e => {
+document.querySelector("#inButton").addEventListener("click", e => {
   e.preventDefault();
+  document.querySelector("#signinText").innerHTML = "";
   firebase
     .auth()
     .signInWithEmailAndPassword(
@@ -30,11 +34,22 @@ document.getElementById("inButton").addEventListener("click", e => {
     )
     .catch(function(error) {
       console.log(error.code);
-      console.log(error.message);
+      if (error.code == "auth/invalid-email") {
+        document.querySelector("#signinText").innerHTML = "sign in";
+        document.querySelector(".loading-bro").style.display = "none";
+        document.querySelector(".wrong").innerHTML = "email doesn't exist";
+        document.querySelector(".wrong").style.display = "block";
+      } else if (error.code == "auth/wrong-password") {
+        document.querySelector("#signinText").innerHTML = "sign in";
+        document.querySelector(".loading-bro").style.display = "none";
+        document.querySelector(".wrong").innerHTML = "wrong password";
+        document.querySelector(".wrong").style.display = "block";
+      }
     });
+  document.querySelector(".loading-bro").style.display = "block";
 });
 
-document.getElementById("signUpButton").addEventListener("click", e => {
+document.querySelector("#signUpButton").addEventListener("click", e => {
   e.preventDefault();
   let name = document.getElementById("userName").value;
   let email = document.getElementById("userMail").value;
@@ -62,17 +77,3 @@ document.getElementById("signUpButton").addEventListener("click", e => {
     .then(response => response.json())
     .then(data => console.log(data));
 });
-
-const signOutButton = document.getElementById("signoutButton");
-signOutButton.addEventListener("click", () => {
-  firebase
-    .auth()
-    .signOut()
-    .catch(error => {
-      console.log(error);
-    });
-});
-
-function createUser() {
-  console.log("hi");
-}
