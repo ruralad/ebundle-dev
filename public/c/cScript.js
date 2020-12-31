@@ -42,8 +42,12 @@ firebase.auth().onAuthStateChanged(function(user) {
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
               document.querySelector("#joinOrCreate").innerText = "Join Class";
-              document.querySelector(".join-create-class").style.display =
-                "flex";
+              document.querySelector(
+                ".join-create-class"
+              ).style.display = document.querySelector(
+                ".loading-bro1"
+              ).style.display = "none";
+              ("flex");
               document.querySelector(".avatar").style.opacity = "1";
 
               document
@@ -55,6 +59,7 @@ firebase.auth().onAuthStateChanged(function(user) {
               document.querySelector("#user-role").innerText = "Teacher";
               document.querySelector("#joinOrCreate").innerText =
                 "Create Class";
+              document.querySelector(".loading-bro1").style.display = "none";
               document.querySelector("#joinOrCreate").href = "#open-create";
               document.querySelector(".join-create-class").style.display =
                 "flex";
@@ -86,6 +91,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
                   a.appendChild(div);
                   classes.appendChild(a);
+          document.querySelector(".loading-bro2").style.display = "none";
+                
                 });
             }
           });
@@ -102,7 +109,7 @@ document.querySelector("#createClassButton").addEventListener("click", e => {
   document.querySelector("#createClassButton").style.pointerEvents = "none";
   let val1 = document.querySelector("#newClassName").value;
   let val2 = document.querySelector("#newClassDescription").value;
-  
+
   firebase
     .auth()
     .currentUser.getIdToken(/* forceRefresh */ true)

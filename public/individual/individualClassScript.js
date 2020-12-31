@@ -9,6 +9,9 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+const storage = firebase.storage();
+let storageRef = storage.ref();
+
 function goto(to) {
   if (to == "c") window.location = "/c";
   else window.location = "/" + to;
@@ -39,9 +42,11 @@ firebase.auth().onAuthStateChanged(function(user) {
           .then(data => {
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
+              document.querySelector(".loading-bro1").style.display = "none";
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Teacher";
+              document.querySelector(".loading-bro1").style.display = "none";
               document.querySelector(".avatar").style.opacity = 1;
             }
           });
@@ -77,7 +82,7 @@ firebase.auth().onAuthStateChanged(function(user) {
           profile.appendChild(profileAvatar);
 
           let profileName = document.createElement("div");
-          profileAvatar.classList.add("profile-name");
+          profileName.classList.add("profile-name");
           profileName.innerText = item.postedBy;
           profile.appendChild(profileName);
 
@@ -88,10 +93,10 @@ firebase.auth().onAuthStateChanged(function(user) {
 
           postHeader.appendChild(profile);
 
-          let postType = document.createElement("div");
-          postHeader.classList.add("post-type");
-          postDate.innerText = "Study Material";
-          postHeader.appendChild(postType);
+          // let postType = document.createElement("div");
+          // postHeader.classList.add("post-type");
+          // postDate.innerText = "Study Material";
+          // postHeader.appendChild(postType);
 
           newDiv.appendChild(postHeader);
 
@@ -101,7 +106,17 @@ firebase.auth().onAuthStateChanged(function(user) {
           postContentPara.innerText = item.text;
           postContent.appendChild(postContentPara);
 
+          if (item.fileUrl != "none") {
+            let link = document.createElement("a");
+            link.classList.add("post-file");
+            link.classList.add("no-linkstyle");
+            link.innerHTML = "File";
+            link.href = item.fileUrl;
+            postContent.appendChild(link);
+          }
+
           newDiv.appendChild(postContent);
+          document.querySelector(".loading-bro2").style.display = "none";
 
           document.querySelector(".class-posts").appendChild(newDiv);
         });
@@ -110,11 +125,66 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 document.querySelector("#newPostSubmit").addEventListener("click", () => {
+  if (document.querySelector("#newPostText").value == "") {
+    document.querySelector("#newPostText").placeholder =
+      "this place cannot be empty, you need to write something here!";
+  } else {
+    const file = document.querySelector("#myFile").files[0];
+    if (file != undefined) {
+      const name = +new Date() + "-" + file.name;
+      const metadata = {
+        contentType: file.type
+      };
+      const task = storageRef.child(name).put(file, metadata);
+      document.querySelector("#progress").style.display = "block";
+      document.querySelector("#uploadMetrics").style.display = "block";
+      task
+        .then(snapshot => snapshot.ref.getDownloadURL())
+        .then(url => {
+          console.log(url);
+          uploadPost(url);
+        })
+        .catch(console.error);
+      task.on(
+        "state_changed",
+        function progress(snapshot) {
+          var percentage =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          document.querySelector("#progress").value = percentage;
+          document.querySelector("#uploadedSize").innerHTML =
+            (snapshot.bytesTransferred / (1024 * 1024)).toFixed(2) + "MB";
+          document.querySelector("#totalSize").innerHTML =
+            (snapshot.totalBytes / (1024 * 1024)).toFixed(2) + "MB";
+        },
+
+        function error() {
+          alert("error uploading file");
+        }
+      );
+    } else uploadPost("none");
+  }
+});
+
+function uploadPost(url) {
   let newtext = document.querySelector("#newPostText").value;
-  let fileUrl = "none";
+  let fileUrl = url;
 
   let d = new Date();
-  let date = d.getDate() + "/" + (d.getMonth() + 1);
+  let months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  let date = months[d.getMonth()] + " " + d.getDate();
 
   fetch("/api/newClassPost", {
     method: "POST",
@@ -146,7 +216,7 @@ document.querySelector("#newPostSubmit").addEventListener("click", () => {
         profile.appendChild(profileAvatar);
 
         let profileName = document.createElement("div");
-        profileAvatar.classList.add("profile-name");
+        profileName.classList.add("profile-name");
         profileName.innerText = currentUser.displayName;
         profile.appendChild(profileName);
 
@@ -157,11 +227,6 @@ document.querySelector("#newPostSubmit").addEventListener("click", () => {
 
         postHeader.appendChild(profile);
 
-        let postType = document.createElement("div");
-        postHeader.classList.add("post-type");
-        postDate.innerText = "Study Material";
-        postHeader.appendChild(postType);
-
         newDiv.appendChild(postHeader);
 
         let postContent = document.createElement("div");
@@ -169,10 +234,23 @@ document.querySelector("#newPostSubmit").addEventListener("click", () => {
         let postContentPara = document.createElement("p");
         postContentPara.innerText = newtext;
         postContent.appendChild(postContentPara);
-
+        if (fileUrl != "none") {
+          let link = document.createElement("a");
+          link.classList.add("post-file");
+          link.classList.add("no-linkstyle");
+          link.innerHTML = "File";
+          link.href = fileUrl;
+          postContent.appendChild(link);
+        }
         newDiv.appendChild(postContent);
 
-        document.querySelector(".class-posts").appendChild(newDiv);
+        document
+          .querySelector(".post")
+          .insertAdjacentElement("beforebegin", newDiv);
+
+        document.querySelector("#progress").style.display = "none";
+        document.querySelector("#uploadMetrics").style.display = "none";
+        document.querySelector("#newPostText").value = "";
       }
     });
-});
+}

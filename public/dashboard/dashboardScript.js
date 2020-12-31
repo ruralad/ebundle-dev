@@ -31,9 +31,12 @@ firebase.auth().onAuthStateChanged(function(user) {
             console.log(data);
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
+              document.querySelector(".loading-bro1").style.display = "none";
               document.querySelector(".avatar").style.opacity = 1;
             } else if (data.role == "teacher") {
               document.querySelector("#user-role").innerText = "Teacher";
+              document.querySelector(".loading-bro1").style.display = "none";
+              document.querySelector(".avatar").style.opacity = 1;
             }
           });
       })

@@ -50,7 +50,7 @@ section .class-section a {
   text-decoration: none;
   display: inline-block;
   height: 230px;
-  width: 180px;
+  width: 200px;
 
   border-radius: 10px;
   margin-right: 30px;
@@ -67,12 +67,12 @@ section .class-section a:hover {
 }
 .class-rectangle h5 {
   font-weight: 500;
-  font-size: 13px;
+  font-size: 16px;
 }
 .class-rectangle p {
   font-weight: 300;
   margin-top: -20px;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 

@@ -25,7 +25,7 @@ a {
 
 .landing-page .header-area {
   display: flex;
-  padding: 25px 0 0;
+  padding: 15px 0 0;
   position: relative;
 }
 
@@ -58,7 +58,7 @@ a {
   padding: 10px 18px;
   color: #FFF;
   background-color: #3FFF52;
-  transition: all 0.2s ease-out;
+  transition: all 0.1s ease-out;
   cursor: pointer;
 }
 .pop-account {
@@ -76,7 +76,7 @@ a {
   cursor: pointer;
   transition: all 0.1s ease-out;
 }
-.pop-account li:hover {
+li:hover {
   font-weight: 700;
 }
 .landing-page .info {
