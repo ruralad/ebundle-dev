@@ -7,6 +7,7 @@ body {
   background: #dfffdf;
   margin: 0;
   font-family: "Raleway", sans-serif;
+  font-size: 16px;
   color: #fff;
   padding-left: 240px;
 }
@@ -48,7 +49,7 @@ main .helper span {
   opacity: 0;
   background-color: #F3F3F3;
 
-  height: 150px;
+  height: 130px;
 
   padding: 2em 0.5em;
   text-align: center;
@@ -69,7 +70,7 @@ main .helper span {
   margin-bottom: 0;
 }
 .menu .avatar p {
-  margin-top: 0px;
+  margin-top: 5px;
   opacity: 0.8;
   font-size: 0.8rem;
 }
@@ -81,7 +82,6 @@ main .helper span {
 }
 .menu ul li {
   padding: 0.5em 1em 0.5em 3em;
-  font-size: 0.95em;
   font-weight: regular;
   background-repeat: no-repeat;
   background-size: auto 20px;
@@ -146,6 +146,10 @@ section .content-header {
     height: 60px;
     position: relative;
     background-color: #eeee;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .menu .avatar img {
     width: 60px;
@@ -256,4 +260,48 @@ section .content-header {
   .menu:focus .smartphone-menu-trigger {
     pointer-events: none;
   }
+}
+
+
+
+#load,
+#load2 {
+  width: 30px;
+  animation: loading 3s linear infinite;
+}
+#load #loading-inner,
+#load2 #loading-inner2 {
+  stroke-dashoffset: 0;
+  stroke-dasharray: 300;
+  stroke-width: 5;
+  stroke-miterlimit: 5;
+  stroke-linecap: round;
+  animation: loading-circle 2s linear infinite;
+  stroke: black;
+  fill: transparent;
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loading-circle {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -600;
+  }
+}
+
+.loading-bro1 {
+}
+header{
+   display: flex;
+  flex-direction: column;
+  align-items: center;
 }
