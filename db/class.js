@@ -46,12 +46,14 @@ const classSchema = new Schema(
         description: {
           type: String
         },
-        file:[{
-          url:String
-        }],
-        createDate: {
+        typeOfWork:{
+          type: String
+        },
+        fileUrl:{
+          type: String
+        },
+        createdDate: {
           type: Date,
-          default: Date.now()
         },
         dueDate: {
           type: Date

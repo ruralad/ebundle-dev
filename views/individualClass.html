@@ -110,7 +110,8 @@
     <main>
       <section>
         <div class="content-header">
-          <h2 id="class-name"></h2>
+          <h2 id="class-name" class="left-content"></h2>
+          <div class="right-content"></div>
         </div>
         <hr />
         <div class="class-body" id="classBody">
@@ -123,13 +124,19 @@
                 id="newPostText"
                 placeholder="write a new post"
               ></textarea>
-              <input type="file" id="myFile" name="filename" />
+
+              <div class="button-wrap">
+                <label class="new-button" for="upload">Add a file</label>
+                <input id="upload" type="file" class="newpost-file" />
+                <span id="currentFile"></span>
+              </div>
               <progress value="0" max="100" id="progress"></progress>
               <div id="uploadMetrics">
                 <span id="uploadedSize"></span>/
                 <span id="totalSize"></span>
               </div>
-              <input id="newPostSubmit" type="submit" value="share" />
+
+              <input id="newPostSubmit" type="submit" value="Share" />
               <div class="loading-circle"></div>
             </div>
 
@@ -159,18 +166,92 @@
           <div class="right-bar">
             <div class="tab">
               <h3 class="add-stuff" id="newWork">Works</h3>
-              
+              <span class="join-create-class hide">
+                <a
+                  class="btn"
+                  id="createNewAssignment"
+                  href="#create-new-assignment"
+                  >new</a
+                >
+              </span>
+              <div id="worksTab">
+                <ul id="worksList">
+                  
+                </ul>
+              </div>
+              <div class="nopending" id="noWorksPending">
+                No works pending
+              </div>
             </div>
             <div class="tab">
               <h3>Previous Live Classes</h3>
+              <div class="nopending" id="noPreviousClassesAvailable">
+                None available
+              </div>
             </div>
             <div class="tab">
               <h3 class="add-stuff" id="newExam">Exams</h3>
+              <span class="join-create-class hide">
+                <a class="btn" id="createNewExam" href="#create-new-exam"
+                  >new</a
+                >
+              </span>
+              <div class="nopending" id="noExamsPending">
+                No exams pending
+              </div>
             </div>
           </div>
         </div>
       </section>
     </main>
+    <div id="create-new-assignment" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close">Close</a>
+        <div class="create-form">
+          <input type="text" id="newWorkTitle" placeholder="Work Title " />
+          <input
+            type="text"
+            id="newWorkDescription"
+            placeholder="Description"
+          />
+          <select name="typeOfWork" id="typeOfWork">
+            <option value="Assignment">Assignment</option>
+            <option value="Written Exam">Written Exam</option>
+          </select>
+          <label class="duelabel">Due Date</label>
+          <input type="date" id="newWorkDueDate" />
+          <input type="time" id="newWorkDueDateTime"/>
+          <input id="uploadWork" type="file" />
+          <progress value="0" max="100" id="progressWork"></progress>
+          <div id="uploadMetricsWork">
+            <span id="uploadedSizeWork"></span>/
+            <span id="totalSizeWork"></span>
+          </div>
+          <button id="newWorkButton">
+            Create
+          </button>
+          <p style="color:black;display:none;" class="creating">
+            Creating...
+          </p>
+        </div>
+      </div>
+    </div>
+    <div id="create-new-exam" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close">Close</a>
+        <div class="create-form">
+          <input type="text" id="newExamName" placeholder="Exam Name " />
+          <input
+            type="text"
+            id="newExamDescription"
+            placeholder="Description"
+          />
+          <button id="newExamButton">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-storage.js"></script>

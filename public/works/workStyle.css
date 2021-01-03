@@ -1,0 +1,28 @@
+.work-section{
+  margin : 20px;
+}
+.work-type{
+  opacity : .6;
+}
+.work-file{
+  width: 80px;
+  height: 30px;
+  border: 1px solid #b0b0b0;
+  border-radius: 5px;
+
+  display: none; /*flex*/
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 10px 0;
+  text-decoration : none;
+}
+.work-due::before{
+  content:"Due Date : " ;
+  font-weight : normal;
+  display : inline;
+}
+.work-due{
+  display : none;
+  font-weight : bold;
+  
+}

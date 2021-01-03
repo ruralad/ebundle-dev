@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam|eBundle</title>
+  <link rel="stylesheet" href="/writeExam/writeExam.css">
+</head>
+<body>
+  <div class="timer hide" id="timer">
+    <div class="digits">
+      <h2 class="time-output" id="hours"></h2>
+      <h2 class="colon" id="colon-one">:</h2>
+      <h2 class="time-output" id="minutes"></h2>
+      <h2 class="colon" id="colon-two">:</h2>
+      <h2 class="time-output" id="seconds"></h2>
+    </div>
+  </div>
+    <div class="container" id="container">
+        <div id="question-container" class="hide">
+          
+          
+        
+        </div>
+        <div class="controls" id="controls"></div>
+        <button id="start-btn" class="start-btn btn"  > Start Exam</button>
+        <button id="next-btn" class="next-btn btn hide " >Next</button>
+        <button id="submit-btn" class="submit-btn btn hide ">Submit</button>
+      </div>
+  <div class= "message hide" id="message"> Exam completed  ..!!</div>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script> 
+    <script src="/writeExam/writeExam.js"></script>
+</body>
+</html>

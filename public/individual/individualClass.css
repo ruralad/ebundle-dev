@@ -1,11 +1,18 @@
 h3 {
-  font-weight: normal;
+  position: relative;
+  font-weight: bold;
   font-size: 15px;
   margin-top: 10px;
   margin-left: 10px;
 
   width: 96%;
   text-align: left;
+}
+a{
+  text-decoration:none;
+}
+.hide{
+  display:none;
 }
 .bigger-font {
   font-size: 17px;
@@ -38,6 +45,7 @@ h3 {
   align-items: center;
 }
 .tab {
+  position: relative;
   background: #F3F3F3;
   width: 80%;
   min-height: 100px;
@@ -122,6 +130,7 @@ h3 {
 }
 .new-post textarea {
   font-family: "Raleway", sans-serif;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.13);
 }
 .new-post .text-area {
   background: white;
@@ -164,7 +173,11 @@ h3 {
 }
 #newPostSubmit {
   margin-top: 20px;
-  height: 30px;
+  height: 35px;
+  background: #3FFF52;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.13);
 }
 .loading-circle {
   display: none;
@@ -188,27 +201,217 @@ h3 {
     -webkit-transform: rotate(-360deg);
   }
 }
-.add-stuff::after {
-  position: absolute;
-  display: inline;
-  content: "+";
-  font-size: 35px;
-  margin-top: -12px;
-  margin-left: 5px;
-  cursor: pointer;
-
-  transition: all 0.2s ease-out;
-}
-.add-stuff:hover::after {
-  margin-top: -15px;
-  font-size: 40px;
-}
 .post-type {
   opacity: 0.8;
 }
 #progress,
-#uploadMetrics {
+#uploadMetrics,
+#progressWork,
+#uploadMetricsWork {
   display: none;
+  color: black;
 }
 
+.join-create-class {
+  border: 1px solid black;
+  position: absolute;
+  border-radius: 5px;
+  cursor: pointer;
 
+  margin: -35px 0 0 60px;
+
+  height: auto;
+  transition: all 0.2s ease-out;
+}
+.join-create-class a {
+  padding: 0 5px 5px 0;
+  margin-left: 5px;
+  color: black;
+  background-color: transparent;
+  font-size: 13px;
+  font-weight: 500;
+}
+.join-create-class a:hover {
+  color: black;
+}
+.modal-window div:not(:last-of-type) {
+  margin-bottom: 15px;
+}
+
+.modal-window small {
+  color: #aaa;
+}
+
+.btn {
+  background-color: #fff;
+  border-radius: 3px;
+  text-decoration: none;
+}
+.btn i {
+  padding-right: 0.3em;
+}
+
+.modal-window {
+  position: fixed;
+  background-color: #F3F3F3;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.modal-window:target {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-window > div {
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: #ffffff;
+
+  border: 1px solid #1a1a1a;
+  border-radius: 5px;
+}
+
+.modal-close {
+  color: black;
+  line-height: 50px;
+  font-size: 80%;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 70px;
+  text-decoration: none;
+}
+
+.create-form {
+  margin-top: 20px;
+}
+.modal-window input,
+.modal-window button {
+  border: none;
+  outline: none;
+  background: none;
+  font-family: "Raleway", sans-serif;
+  margin-top: 15px;
+}
+
+.modal-window input {
+  display: block;
+  width: 100%;
+  margin-top: 25px;
+  padding-bottom: 5px;
+  font-size: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  text-align: left;
+}
+.create-form button {
+  width: 100px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--text-black);
+  font-size: 15px;
+  cursor: pointer;
+  background: #3FFF52;
+
+  transition: all 0.3s ease-out;
+}
+.create-form button:active {
+  transform: scale(1.1);
+}
+.modal-window input::placeholder {
+  font-size: 12px;
+  color: #9FA1A1;
+}
+input[type="file"] {
+  position: relative;
+  top: 6px;
+  left: 0px;
+  font-size: 15px;
+  color: rgb(153, 153, 153);
+}
+.newpost-file {
+  position: relative;
+  z-index: -1;
+  top: 6px;
+  left: 0px;
+  font-size: 15px;
+  color: rgb(153, 153, 153);
+}
+
+.button-wrap {
+  position: relative;
+}
+
+.new-button {
+  display: inline-block;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+  color: black;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.13);
+}
+#currentFile {
+  margin-left: -75px;
+  opacity: 0.7;
+  font-family: "Segoue UI";
+}
+select {
+  width: 50%;
+  display: block;
+  margin-top: 25px;
+  margin-left: -5px;
+  padding-bottom: 5px;
+  color: var(--text-black);
+
+  border-top: 5px solid transparent;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5);
+}
+input[type="date"],
+input[type="time"] {
+  display: inline-block;
+  width: 40%;
+}
+input[type="time"] {
+  margin-left: 30px;
+  margin-bottom: 20px;
+}
+.duelabel {
+  display: block;
+  font-size: 14px;
+  color: black;
+  margin-top: 30px;
+  margin-bottom: -17px;
+  margin-left: 2px;
+}
+.nopending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  opacity:.5;
+}
+#worksList li a{
+  display:inline-block;
+  color:black;
+  margin-bottom : 6px;
+}
+#worksList li a:hover{
+  text-decoration : underline;
+}

@@ -109,20 +109,30 @@
     <main>
       <section>
         <div class="content-header">
-          <h2>
-            Your Classes
-          </h2>
-          <div class="join-create-class">
-            <span>+</span>
-            <a class="btn"  id="joinOrCreate"></a>
+          <div class="left-content">
+            <h2>
+              Your Classes
+            </h2>
+            <div class="join-create-class">
+              <span>+</span>
+              <a class="btn" id="joinOrCreate"></a>
+            </div>
+            
+          </div>
+          <div class="right-content">
           </div>
         </div>
         <hr />
-        <div class="class-section" id="classes"><div class="loading-bro2">
-              <svg id="load2" x="0px" y="0px" viewbox="0 0 150 150">
-                <circle id="loading-inner2" cx="75" cy="75" r="60" />
-              </svg>
-            </div></div>
+        <div class="class-section" id="classes">
+          <p id="empty" style="display:none;"> 
+            You are not currently enrolled in any classes.
+          </p>
+          <div class="loading-bro2">
+            <svg id="load2" x="0px" y="0px" viewbox="0 0 150 150">
+              <circle id="loading-inner2" cx="75" cy="75" r="60" />
+            </svg>
+          </div>
+        </div>
       </section>
     </main>
 
@@ -130,15 +140,47 @@
       <div>
         <a href="#" title="Close" class="modal-close">Close</a>
         <div class="create-form">
-        <input type="text" id="newClassName" placeholder="class name eg: Theory Of Computation ">
-        <input type="text" id="newClassDescription" placeholder="description eg: CS307 Semester 5">
-        <button id="createClassButton">
-          Create
+          <input
+            type="text"
+            id="newClassName"
+            placeholder="class name eg: Theory Of Computation "
+          />
+          <input
+            type="text"
+            id="newClassDescription"
+            placeholder="description eg: CS307 Semester 5"
+          />
+          <button id="createClassButton">
+            Create
           </button>
         </div>
       </div>
     </div>
 
+    <div id="open-join" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close">Close</a>
+        <div class="create-form">
+          <input
+            type="text"
+            id="joinClassCode"
+            placeholder="Enter the class code eg : ADODJ"
+            required
+            maxlength="5"
+          />
+          <button id="joinClassButton">
+            Create
+          </button>
+          <p style="color:#3FFF52;display:none;" id="joining">
+            Joining...
+          </p>
+          <p style="color:red;display:none;" id="joinerror">
+            The class code doesn't exist. Please try again
+          </p>
+        </div>
+      </div>
+    </div>
+    
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
     <script src="/c/cScript.js" defer></script>

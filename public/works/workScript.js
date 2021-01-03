@@ -9,11 +9,15 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+let currentClassCode = window.location.pathname.slice(3).split("/")[0];
+let workCode = window.location.pathname.split("works/")[1];
+let currentUser;
 
 firebase.auth().onAuthStateChanged(function(user) {
   if (!user) {
     window.location = "/account";
   } else {
+    currentUser = user;
     document.querySelector("#user-name").innerText = user.displayName;
     document.querySelector("#user-avatar").src =
       "https://ui-avatars.com/api/?background=92ef87&name=" + user.displayName;
@@ -29,7 +33,6 @@ firebase.auth().onAuthStateChanged(function(user) {
         })
           .then(response => response.json())
           .then(data => {
-            console.log(data);
             if (data.role == "student") {
               document.querySelector("#user-role").innerText = "Student";
               document.querySelector(".loading-bro1").style.display = "none";
@@ -43,6 +46,32 @@ firebase.auth().onAuthStateChanged(function(user) {
       })
       .catch(function(error) {
         console.log(error);
+      });
+    firebase
+      .auth()
+      .currentUser.getIdToken(/* forceRefresh */ true)
+      .then(function(idToken) {
+        fetch("/api/getWorkData", {
+          method: "GET",
+          headers: {
+            Authorization: currentClassCode + "/" + workCode + "#" + idToken
+          }
+        })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            let d = new Date(data.dueDate).toUTCString();
+            let date = d.split("");
+
+            document.querySelector("#pageTitle").innerHTML = data.title;
+            document.querySelector(".work-type").innerHTML = data.typeOfWork;
+            document.querySelector(".work-due").innerHTML = date;
+            document.querySelector(".work-due").style.display = "block";
+            if (data.description != "")
+              document.querySelector(".work-desc").innerHTML = data.description;
+            if (data.fileUrl != "none")
+              document.querySelector(".work-title").style.display = "flex";
+          });
       });
   }
 });

@@ -1,0 +1,94 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --hue-neutral: 200;
+    --hue-wrong: 90;
+    --hue-correct: 145;
+  }
+  
+  body {
+    --hue: var(--hue-neutral);
+    padding: 0;
+    margin: 0;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background-color: hsl(var(--hue), 100%, 20%);
+  }
+  
+  .container {
+    width: 800px;
+    max-width: 80%;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 0 10px 2px;
+  }
+  .btn {
+    --hue: var(--hue-neutral);
+    border: 1px solid hsl(var(--hue), 100%, 30%);
+    background-color: hsl(var(--hue), 100%, 50%);
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: white;
+    outline: none;
+    float: left;
+  }
+  
+  
+  .btn:hover {
+    border-color: black;
+  }
+
+  .start-btn {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px 20px;
+  }
+  
+  .controls {
+     display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hide {
+    display: none;
+  }
+  #timer{
+    background-color: aqua;
+padding-left: 5px;
+padding-right: 5px;
+padding-bottom: 10px;
+   position: absolute;
+  top: 16px;
+ 
+  border-radius: 10px;
+
+  }
+  
+  .digits {
+    display: flex;
+    flex-direction: row;
+  }
+  .next-btn{
+    flex-direction: row;
+  }
+
+/* Background Styles Only */
+  
+  @import url('https://fonts.googleapis.com/css?family=Raleway');
+  
+  
+  html {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #DFDFDF;
+  }

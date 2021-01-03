@@ -23,6 +23,13 @@ const teacherSchema = new Schema(
       type: String
       // required : true
     },
+    works: [
+      {
+        workid: {
+          type: String
+        }
+      }
+    ],
     classes: [
       {
         className: String,

@@ -2,7 +2,6 @@ const express = require("express");
 const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const router = express.Router();
 const app = express();
 
 //pug,template configurations
@@ -72,12 +71,24 @@ app.get("/dashboard", (req, res) => {
   res.sendFile(__dirname + "/views/dashboard.html");
 });
 
+app.get("/calendar", (req, res) => {
+  res.sendFile(__dirname + "/views/calendar.html");
+});
+
+app.get("/writeexam", (req, res) => {
+  res.sendFile(__dirname + "/views/writeExam/writeExam.html");
+});
+
 app.get("/works", (req, res) => {
   res.sendFile(__dirname + "/views/works.html");
 });
 
 app.get("/exams", (req, res) => {
   res.sendFile(__dirname + "/views/exams.html");
+});
+
+app.get("/c/:classid/works/:workid", (req, res) => {
+  res.sendFile(__dirname + "/views/individual/works.html");
 });
 //---------------------------------------api---------------------------------------------//
 
@@ -169,24 +180,31 @@ app.post("/api/createNewClass", authenticateToken, (req, res) => {
 });
 
 //join a new class, if the requested user is a student
-//NOTFINISHED-------------------------------------------------------------------------!!!!
 app.post("/api/joinClass", authenticateToken, (req, res) => {
   Student.exists({ firebaseUID: req.uid })
     .then(result => {
       if (result) {
-        Class.findOne({ classCode: req.body.classCode }, function(
-          err,
-          classDocs
-        ) {
-          Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
-            docs.classes.push(classDocs._id);
-            docs.save().then(res.send("joined"));
+        Class.exists({ classCode: req.body.classCode }).then(result => {
+          if (result) {
+            Class.findOne({ classCode: req.body.classCode }, function(
+              err,
+              classDocs
+            ) {
+              Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
+                docs.classes.unshift(classDocs._id);
+                docs.save().then(
+                classDocs.classStudents.push(docs._id));
+                classDocs.save().then(
+                res.json({
+                  message : "joined"
+                }));
+              });
+            });
+          }else res.json({
+            message : "notExist"
           });
         });
-        Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
-          docs.classes.push(result._id);
-          docs.save().then(res.send("created"));
-        });
+
       } else {
         res.send("notAuthorized");
       }
@@ -247,7 +265,6 @@ app.get("/api/getCompleteClassData", (req, res) => {
 });
 
 app.post("/api/newClassPost", (req, res) => {
-  console.log(req.body);
   Class.exists({ _id: req.headers.authorization })
     .then(result => {
       if (result) {
@@ -258,9 +275,11 @@ app.post("/api/newClassPost", (req, res) => {
             date: req.body.date,
             postedBy: req.body.postedBy
           });
-          docs.save().then(res.json({
-            message : "newPostAdded"
-          }));
+          docs.save().then(
+            res.json({
+              message: "newPostAdded"
+            })
+          );
         });
       }
     })
@@ -268,6 +287,121 @@ app.post("/api/newClassPost", (req, res) => {
       console.log(err);
     });
 });
+
+app.post("/api/newClassWork", authenticateToken, (req, res) => {
+  Teacher.exists({ firebaseUID: req.uid }).then(result => {
+    if (result) {
+      Class.exists({ _id: req.body.currentClassCode })
+        .then(result => {
+          if (result) {
+            Class.findOne({ _id: req.body.currentClassCode }, function(
+              err,
+              docs
+            ) {
+              docs.assignments.unshift({
+                title: req.body.title,
+                description: req.body.description,
+                typeOfWork: req.body.type,
+                fileUrl: req.body.fileUrl,
+                createdDate: req.body.createdDate,
+                dueDate: req.body.dueDate,
+                createdBy: req.body.createdBy,
+                comments: [
+                  //   {
+                  //   name:String,
+                  //   message : String
+                  // }
+                ],
+                submissions: [
+                  //                            {
+                  //   email:String,
+                  //   roll: Number,
+                  //   submittedOn : Date,
+                  //   fileUrl : String
+                  // }
+                ]
+              });
+              docs.save().then(result => {
+                Teacher.findOne({ firebaseUID: req.uid }, function(err, docs) {
+                  docs.works.unshift(result._id);
+                  docs.save().then(
+                    res.json({
+                      response: "newWorkAdded",
+                      id: result._id
+                    })
+                  );
+                });
+              });
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      res.json({
+        message: "notTeacher"
+      });
+    }
+  });
+});
+
+app.get("/api/getWorkData", (req, res) => {
+  let classCode = req.headers.authorization.split("/")[0];
+  let temp = req.headers.authorization.split("/")[1];
+  let workCode = temp.split("#")[0];
+  let token = req.headers.authorization.split("#")[1];
+
+  admin
+    .auth()
+    .verifyIdToken(token)
+    .then(function(decodedToken) {
+      Class.exists({ _id: classCode })
+        .then(result => {
+          if (result) {
+            Class.findOne({ _id: classCode }).then(data => {
+              data.assignments.forEach((item, index) => {
+                if (item._id == workCode) {
+                  res.send(item);
+                }
+              });
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    })
+    .catch(err => {
+      res.send("notVerified");
+    });
+});
+
+//------------------- calendar events ---------------------//
+
+app.get("/api/events", authenticateToken, (req, res) => {
+  Student.exists({ firebaseUID: req.uid }).then(result => {
+    if (result) {
+      console.log(result);
+      Student.findOne({ firebaseUID: req.uid }).then(Result => {
+        Result.classes.forEach(cls => {
+          Class.findOne({ _id: cls }).then(data => {
+            res.send(data.assignments);
+          });
+        });
+      });
+    } else {
+      Teacher.findOne({ firebaseUID: req.uid }).then(Result => {
+        Result.classes.forEach(cls => {
+          Class.findOne({ _id: cls }).then(data => {
+            res.send(data.assignments);
+          });
+        });
+      });
+    }
+  });
+});
+
 //-------------------------------------listener------------------------------------------//
 
 const listener = app.listen(process.env.PORT, () => {
