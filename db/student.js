@@ -23,6 +23,16 @@ const studentSchema = new Schema(
       type: String
       // required : true
     },
+    works: [
+      {
+        workid: {
+          type: String
+        },
+        finished: {
+          type: String
+        }
+      }
+    ],
     classes: [
       {
         classId: String

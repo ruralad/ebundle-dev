@@ -16,8 +16,7 @@ function goto(to) {
   if (to == "c") window.location = "/c";
   else window.location = "/" + to;
 }
-
-let currentClassCode = window.location.pathname.slice(3);
+let currentClassCode = window.location.pathname.slice(3).split("/")[0];
 let currentUser;
 
 firebase.auth().onAuthStateChanged(function(user) {
@@ -48,6 +47,9 @@ firebase.auth().onAuthStateChanged(function(user) {
               document.querySelector("#user-role").innerText = "Teacher";
               document.querySelector(".loading-bro1").style.display = "none";
               document.querySelector(".avatar").style.opacity = 1;
+              Array.from(document.getElementsByClassName("hide")).forEach(el =>
+                el.classList.remove("hide")
+              );
             }
           });
       })
@@ -64,6 +66,8 @@ firebase.auth().onAuthStateChanged(function(user) {
       .then(response => response.json())
       .then(data => {
         console.log(data.data);
+        document.querySelector(".right-content").innerText =
+          "Class Code : " + data.data.classCode;
         document.querySelector("#class-name").innerText = data.data.className;
         document.title = data.data.className + " | eBundle";
 
@@ -120,8 +124,31 @@ firebase.auth().onAuthStateChanged(function(user) {
 
           document.querySelector(".class-posts").appendChild(newDiv);
         });
+        //works
+        if (data.data.assignments.length > 0) {
+          data.data.assignments.forEach((item, index) => {
+            let li = document.createElement("li");
+            let a = document.createElement("a");
+            a.innerHTML = item.title + " (" + item.typeOfWork + ")";
+            a.href = "/c/" + currentClassCode + "/works/" + item._id;
+
+            li.appendChild(a);
+            document.querySelector("#worksList").appendChild(li);
+            document.querySelector("#noWorksPending").style.display = "none";
+          });
+        }
       });
   }
+});
+
+document.querySelector("#upload").addEventListener("change", () => {
+  document.querySelector("#currentFile").innerHTML =
+    document.querySelector("#upload").files[0].name +
+    " (" +
+    (document.querySelector("#upload").files[0].size / (1024 * 1024)).toFixed(
+      2
+    ) +
+    "MB)";
 });
 
 document.querySelector("#newPostSubmit").addEventListener("click", () => {
@@ -129,7 +156,7 @@ document.querySelector("#newPostSubmit").addEventListener("click", () => {
     document.querySelector("#newPostText").placeholder =
       "this place cannot be empty, you need to write something here!";
   } else {
-    const file = document.querySelector("#myFile").files[0];
+    const file = document.querySelector("#upload").files[0];
     if (file != undefined) {
       const name = +new Date() + "-" + file.name;
       const metadata = {
@@ -141,7 +168,6 @@ document.querySelector("#newPostSubmit").addEventListener("click", () => {
       task
         .then(snapshot => snapshot.ref.getDownloadURL())
         .then(url => {
-          console.log(url);
           uploadPost(url);
         })
         .catch(console.error);
@@ -252,5 +278,85 @@ function uploadPost(url) {
         document.querySelector("#uploadMetrics").style.display = "none";
         document.querySelector("#newPostText").value = "";
       }
+    });
+}
+
+//create new work (only for teachers)
+document.querySelector("#newWorkButton").addEventListener("click", e => {
+  e.preventDefault();
+  document.querySelector("#newWorkButton").style.display = "none";
+  document.querySelector(".creating").style.display = "block";
+
+  const file = document.querySelector("#uploadWork").files[0];
+  if (file != undefined) {
+    const name = +new Date() + "-" + file.name;
+    const metadata = {
+      contentType: file.type
+    };
+    const task = storageRef.child(name).put(file, metadata);
+    document.querySelector("#progressWork").style.display = "block";
+    document.querySelector("#uploadMetricsWork").style.display = "block";
+    task
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(url => {
+        uploadWork(url);
+      })
+      .catch(console.error);
+    task.on(
+      "state_changed",
+      function progress(snapshot) {
+        var percentage =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        document.querySelector("#progressWork").value = percentage;
+        document.querySelector("#uploadedSizeWork").innerHTML =
+          (snapshot.bytesTransferred / (1024 * 1024)).toFixed(2) + "MB";
+        document.querySelector("#totalSizeWork").innerHTML =
+          (snapshot.totalBytes / (1024 * 1024)).toFixed(2) + "MB";
+      },
+
+      function error() {
+        alert("error uploading file");
+      }
+    );
+  } else uploadWork("none");
+});
+
+function uploadWork(fileUrl) {
+  let title = document.querySelector("#newWorkTitle").value;
+  let description = document.querySelector("#newWorkDescription").value;
+  let type = document.querySelector("#typeOfWork").value;
+  let dueDate =
+    document.querySelector("#newWorkDueDate").value +
+    "T" +
+    document.querySelector("#newWorkDueDateTime").value;
+  let createdDate = new Date().toLocaleDateString("en-CA");
+  firebase
+    .auth()
+    .currentUser.getIdToken(/* forceRefresh */ true)
+    .then(async function(idToken) {
+      fetch("/api/newClassWork", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: idToken
+        },
+        body: JSON.stringify({
+          currentClassCode,
+          title,
+          description,
+          type,
+          dueDate,
+          createdDate,
+          fileUrl,
+          createdBy: currentUser.email
+        })
+      })
+        .then(response => response.json())
+        .then(returnData => {
+          if ((returnData.message = "newWorkAdded")) {
+            window.location =
+              "/c/" + currentClassCode + "/works/" + returnData.id;
+          }
+        });
     });
 }

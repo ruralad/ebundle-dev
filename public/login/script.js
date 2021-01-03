@@ -75,5 +75,7 @@ document.querySelector("#signUpButton").addEventListener("click", e => {
     body: stuff
   })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => {
+      if (data.response == "created") window.location.reload();
+    });
 });
