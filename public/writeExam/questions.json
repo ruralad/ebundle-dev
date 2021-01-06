@@ -1,0 +1,49 @@
+ [
+  {
+    "question": "What is 2 + 2?",
+    "question_no": 1,
+
+    "Options": [
+        { "text": "4" },
+        { "text": "22" }
+    ],
+    "answer": "4"
+  },
+
+  {
+    "question": "1 usd == __ inr",
+    "question_no": 2,
+
+    "Options": [
+      { "text": "112" },
+      { "text": "72" },
+      { "text": "753" },
+      { "text": "152" }
+    ],
+    "answer": "72"
+  },
+  {
+    "question": "What is 4 * 2?",
+    "question_no": 3,
+
+    "Options": [
+      { "text": "6" },
+      { "text": "8" },
+      { "text": "10" },
+      { "text": "42" }
+    ],
+    "answer": "8"
+  },
+  {
+    "question": "kudumbasree of geci",
+    "question_no": 4,
+
+    "Options": [
+      { "text": "j k" },
+      { "text": "annan" },
+      { "text": "kuttoos" },
+      { "text": "atta" }
+    ],
+    "answer": "kuttoos"
+  }
+]

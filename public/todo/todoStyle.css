@@ -1,0 +1,66 @@
+/* Style the tab */
+.tab {
+  margin: 20px;
+  width: 80%;
+  overflow: hidden;
+
+  font-size: 16px;
+  display:none;
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: #f1f1f1;
+  float: center;
+  border: none;
+  border-radius: 5px;
+
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  margin-right: 20px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  margin: 20px;
+  padding: 6px 12px;
+}
+.hide {
+  display: none;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 70%;
+}
+tr {
+  padding-bottom: 10px;
+}
+td,
+th {
+  text-align: left;
+  padding: 8px;
+}
+td a {
+  text-decoration: none;
+  color: black;
+}
+td a:hover {
+  text-decoration: underline;
+}
+tr:nth-child(odd) {
+  background-color: #F3F3F3;
+}

@@ -146,6 +146,11 @@
                 <circle id="loading-inner2" cx="75" cy="75" r="60" />
               </svg>
             </div>
+            <div class="post no-post" style="display:none;">
+              <p>
+                No posts shared yet.
+              </p>
+            </div>
             <!--             <div class="post">
               <div class="post-header">
                 <div class="profile">
@@ -164,6 +169,9 @@
             </div> -->
           </section>
           <div class="right-bar">
+            <div class="attendance">
+              <p>Attendance</p>
+            </div>
             <div class="tab">
               <h3 class="add-stuff" id="newWork">Works</h3>
               <span class="join-create-class hide">
@@ -175,20 +183,18 @@
                 >
               </span>
               <div id="worksTab">
-                <ul id="worksList">
-                  
-                </ul>
+                <ul id="worksList"></ul>
               </div>
               <div class="nopending" id="noWorksPending">
                 No works pending
               </div>
             </div>
-            <div class="tab">
+            <!--             <div class="tab">
               <h3>Previous Live Classes</h3>
               <div class="nopending" id="noPreviousClassesAvailable">
                 None available
               </div>
-            </div>
+            </div> -->
             <div class="tab">
               <h3 class="add-stuff" id="newExam">Exams</h3>
               <span class="join-create-class hide">
@@ -220,7 +226,7 @@
           </select>
           <label class="duelabel">Due Date</label>
           <input type="date" id="newWorkDueDate" />
-          <input type="time" id="newWorkDueDateTime"/>
+          <input type="time" id="newWorkDueDateTime" />
           <input id="uploadWork" type="file" />
           <progress value="0" max="100" id="progressWork"></progress>
           <div id="uploadMetricsWork">

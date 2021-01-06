@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SignIn | eBundle</title>
+    <title>Get Started • eBundle</title>
     <link rel="stylesheet" href="/login/loginStyle.css" />
   </head>
   <body>
@@ -35,17 +35,16 @@
           <p id="signinText">
             Sign In
           </p>
-
           <div class="loading-bro">
             <svg id="load" x="0px" y="0px" viewbox="0 0 150 150">
               <circle id="loading-inner" cx="75" cy="75" r="60" />
             </svg>
           </div>
         </button>
-        <p class="wrong">
-          
-        </p>
-        <p class="forgot-pass">Forgot password?</p>
+        <p class="wrong"></p>
+        <a class="forgot-pass btn" id="forgotPassword" href="#forgot-password">
+          Forgot password?
+        </a>
       </div>
       <div class="sub-cont">
         <div class="img">
@@ -66,9 +65,6 @@
         </div>
         <div class="form sign-up">
           <h2>signup</h2>
-          <p class="belowh2">
-            make online-learning eeeesy.
-          </p>
           <label>
             <input type="text" placeholder="full name" id="userName" />
           </label>
@@ -78,6 +74,7 @@
           <label>
             <input type="password" placeholder="Password" id="userPassword" />
           </label>
+
           <label>
             <input
               type="password"
@@ -85,6 +82,9 @@
               id="userPasswordConfirm"
             />
           </label>
+          <p id="passwordNoMatch">
+            the passwords doesn't match😐
+          </p>
           <div class="radio">
             <div>
               <input
@@ -105,9 +105,23 @@
               <label>teacher</label>
             </div>
           </div>
-
+          <label>
+            <input
+              type="number"
+              placeholder="Roll Number"
+              id="rollno"
+              style="display:none;"
+            />
+          </label>
           <button type="button" class="submit" id="signUpButton">
-            Sign Up
+            <p id="signupText">
+              Sign up
+            </p>
+            <div class="loading-bro1">
+              <svg id="load1" x="0px" y="0px" viewbox="0 0 150 150">
+                <circle id="loading-inner1" cx="75" cy="75" r="60" />
+              </svg>
+            </div>
           </button>
           <!--           <button type="button" class="fb-btn">
             Join with <span>facebook</span>
@@ -115,6 +129,35 @@
         </div>
       </div>
     </div>
+
+    <!--     forgot-password -->
+    <div id="forgot-password" class="modal-window">
+      <div>
+        <a href="#" title="Close" class="modal-close">close</a>
+        <div class="create-form">
+          <input
+            type="email"
+            id="emailForgotPass"
+            placeholder="enter your email"
+            required
+          />
+
+          <p style="color:black;display:none;margin-bottom:15px;" id="submittingEmail">
+            sending password reset link👨🏻‍🔧
+          </p>
+          <p style="color:#3FFF52;display:none;margin-bottom:15px;" id="emailSent">
+            link sent! now go and check your inbox🔍
+          </p>
+          <p style="color:red;display:none;margin-bottom:15px;" id="emailError">
+            
+          </p>
+          <button id="submitEmail">
+            submit
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       document.querySelector(".img__btn").addEventListener("click", function() {
         document.querySelector(".cont").classList.toggle("s--signup");

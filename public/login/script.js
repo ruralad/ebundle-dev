@@ -26,11 +26,12 @@ document.querySelector(".logo").addEventListener("click", () => {
 document.querySelector("#inButton").addEventListener("click", e => {
   e.preventDefault();
   document.querySelector("#signinText").innerHTML = "";
+  document.querySelector(".loading-bro").style.display = "block";
   firebase
     .auth()
     .signInWithEmailAndPassword(
-      document.getElementById("inEmail").value,
-      document.getElementById("inPassword").value
+      document.querySelector("#inEmail").value,
+      document.querySelector("#inPassword").value
     )
     .catch(function(error) {
       console.log(error.code);
@@ -44,29 +45,61 @@ document.querySelector("#inButton").addEventListener("click", e => {
         document.querySelector(".loading-bro").style.display = "none";
         document.querySelector(".wrong").innerHTML = "wrong password";
         document.querySelector(".wrong").style.display = "block";
+      } else if (error.code == "auth/user-not-found") {
+        document.querySelector("#signinText").innerHTML = "sign in";
+        document.querySelector(".loading-bro").style.display = "none";
+        document.querySelector(".wrong").innerHTML =
+          "we couldn't recognise you. <br> please make a new account";
+        document.querySelector(".wrong").style.display = "block";
+        document.querySelector(".forgot-pass").style.display = "none";
       }
     });
-  document.querySelector(".loading-bro").style.display = "block";
 });
+
+//passwords do not match
+document.querySelector("#userPasswordConfirm").addEventListener("input", e => {
+  if (
+    document.querySelector("#userPasswordConfirm").value !=
+    document.querySelector("#userPassword").value
+  ) {
+    document.querySelector("#passwordNoMatch").style.display = "block";
+  } else document.querySelector("#passwordNoMatch").style.display = "none";
+});
+
+//show rollnumber input if radio checked is student
+document.querySelector("#studentRadio").addEventListener("change", e => {
+  if (document.querySelector("#studentRadio").checked)
+    document.querySelector("#rollno").style.display = "block";
+});
+document.querySelector("#teacherRadio").addEventListener("change", e => {
+  if (document.querySelector("#teacherRadio").checked)
+    document.querySelector("#rollno").style.display = "none";
+});
+
 
 document.querySelector("#signUpButton").addEventListener("click", e => {
   e.preventDefault();
-  let name = document.getElementById("userName").value;
-  let email = document.getElementById("userMail").value;
-  let password = document.getElementById("userPasswordConfirm").value;
-  let role;
 
-  if (document.getElementById("studentRadio").checked)
-    role = document.getElementById("studentRadio").value;
-  else if (document.getElementById("teacherRadio").checked)
-    role = document.getElementById("teacherRadio").value;
+  document.querySelector("#signupText").innerHTML = "";
+  document.querySelector(".loading-bro1").style.display = "block";
+
+  let name = document.querySelector("#userName").value;
+  let email = document.querySelector("#userMail").value;
+  let password = document.querySelector("#userPasswordConfirm").value;
+  let role;
+  let rollno = document.querySelector("#rollno").value;
+
+  if (document.querySelector("#studentRadio").checked)
+    role = document.querySelector("#studentRadio").value;
+  else if (document.querySelector("#teacherRadio").checked)
+    role = document.querySelector("#teacherRadio").value;
   let stuff = JSON.stringify({
     name,
     email,
     password,
-    role
+    role,
+    rollno
   });
-
   fetch("/api/signup", {
     method: "POST",
     headers: {
@@ -77,5 +110,34 @@ document.querySelector("#signUpButton").addEventListener("click", e => {
     .then(response => response.json())
     .then(data => {
       if (data.response == "created") window.location.reload();
+    });
+});
+
+//password reset
+document.querySelector("#submitEmail").addEventListener("click", e => {
+  let email = document.querySelector("#emailForgotPass").value;
+  document.querySelector("#emailError").style.display = "none";
+  document.querySelector("#submitEmail").style.display = "none";
+  document.querySelector("#submittingEmail").style.display = "block";
+
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(function() {
+      document.querySelector("#submittingEmail").style.display = "none";
+      document.querySelector("#emailSent").style.display = "block";
+    })
+    .catch(function(error) {
+      document.querySelector("#submitEmail").style.display = "block";
+      document.querySelector("#submittingEmail").style.display = "none";
+      document.querySelector("#emailError").style.display = "block";
+      console.log(error.code);
+      if (error.code == "auth/user-not-found") {
+        document.querySelector("#emailError").innerHTML =
+          "The email doesn't exist👎🏼 try again";
+      } else if (error.code == "auth/invalid-email") {
+        document.querySelector("#emailError").innerHTML =
+          "Please enter a valid email🙄";
+      }
     });
 });

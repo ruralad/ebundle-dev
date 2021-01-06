@@ -29,13 +29,13 @@ const classSchema = new Schema(
     ],
     classStudents: [
       {
-        email: {
+        id: {
           type: String,
           required: true
         }
       }
     ],
-    
+
     //assignments
     assignments: [
       {
@@ -46,43 +46,63 @@ const classSchema = new Schema(
         description: {
           type: String
         },
-        typeOfWork:{
+        typeOfWork: {
           type: String
         },
-        fileUrl:{
+        fileUrl: {
           type: String
         },
         createdDate: {
-          type: Date,
+          type: Date
         },
         dueDate: {
           type: Date
         },
-        comments:[{
-          name:String,
-          message : String
-        }],
-        submissions:[{
-          email:String,
-          roll: Number,
-          submittedOn : Date,
-          fileUrl : String
-        }]
+        comments: [
+          {
+            name: String,
+            message: String
+          }
+        ],
+        submissions: [
+          {
+            studentFirebaseId: {
+              type: String,
+              required: true
+            },
+            submittedOn: {
+              type: String,
+              required: true
+            },
+            fileUrl: String
+          }
+        ]
       }
     ],
-    
+
     //posts
-    posts:[{
-      text:String,
-      date : String,
-      postedBy : String,
-      fileUrl : String,
-      comments:[{
-          name:String,
-          message : String
-        }]
-    }],
-    
+    posts: [
+      {
+        text: String,
+        date: String,
+        postedBy: String,
+        fileUrl: String,
+        comments: [
+          {
+            name: String,
+            message: String
+          }
+        ]
+      }
+    ],
+    attendance:[
+      {
+        studentName : String,
+        studentFirebaseId : String,
+        studentRollNo : String,
+        classAttended : String
+      }
+    ]
   },
   { timestamps: true }
 );

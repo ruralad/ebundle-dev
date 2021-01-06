@@ -3,6 +3,7 @@ const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
+const fs = require("fs");
 
 //pug,template configurations
 const pug = require("pug");
@@ -75,12 +76,8 @@ app.get("/calendar", (req, res) => {
   res.sendFile(__dirname + "/views/calendar.html");
 });
 
-app.get("/writeexam", (req, res) => {
-  res.sendFile(__dirname + "/views/writeExam/writeExam.html");
-});
-
 app.get("/works", (req, res) => {
-  res.sendFile(__dirname + "/views/works.html");
+  res.sendFile(__dirname + "/views/todo.html");
 });
 
 app.get("/exams", (req, res) => {
@@ -89,6 +86,21 @@ app.get("/exams", (req, res) => {
 
 app.get("/c/:classid/works/:workid", (req, res) => {
   res.sendFile(__dirname + "/views/individual/works.html");
+});
+
+app.get("/c/:classid/attendance", (req, res) => {
+  res.sendFile(__dirname + "/views/individual/attendance.html");
+});
+
+app.get("/writeexam", (req, res) => {
+  res.sendFile(__dirname + "/views/writeExam/writeExam.html");
+});
+
+app.get("/markattendance", (req, res) => {
+  res.sendFile(__dirname + "/views/markAttendance.html");
+});
+app.get("/markview", (req, res) => {
+  res.sendFile(__dirname + "/views/markview/markview.html");
 });
 //---------------------------------------api---------------------------------------------//
 
@@ -104,7 +116,6 @@ app.post("/api/signup", (req, res) => {
       password: req.body.password
     })
     .then(function(userRecord) {
-      console.log(userRecord);
       if (req.body.role == "teacher") {
         const teacher = new Teacher({
           name: req.body.name,
@@ -125,7 +136,8 @@ app.post("/api/signup", (req, res) => {
           name: req.body.name,
           email: req.body.email,
           firebaseUID: userRecord.uid,
-          role: "student"
+          role: "student",
+          rollno: req.body.rollno
         });
         student
           .save()
@@ -192,19 +204,23 @@ app.post("/api/joinClass", authenticateToken, (req, res) => {
             ) {
               Student.findOne({ firebaseUID: req.uid }, function(err, docs) {
                 docs.classes.unshift(classDocs._id);
-                docs.save().then(
-                classDocs.classStudents.push(docs._id));
-                classDocs.save().then(
-                res.json({
-                  message : "joined"
-                }));
+                docs.save().then(() => {
+                  classDocs.classStudents.push({
+                    id: docs._id
+                  });
+                  classDocs.save().then(
+                    res.json({
+                      message: "joined"
+                    })
+                  );
+                });
               });
             });
-          }else res.json({
-            message : "notExist"
-          });
+          } else
+            res.json({
+              message: "notExist"
+            });
         });
-
       } else {
         res.send("notAuthorized");
       }
@@ -213,6 +229,7 @@ app.post("/api/joinClass", authenticateToken, (req, res) => {
 });
 
 //send all the data from their document, based on their role(teacher or student)
+//get user data
 app.get("/api/getData", authenticateToken, (req, res) => {
   Teacher.exists({ firebaseUID: req.uid }).then(result => {
     if (result) {
@@ -226,8 +243,29 @@ app.get("/api/getData", authenticateToken, (req, res) => {
     }
   });
 });
+app.get("/api/getDataPassive", (req, res) => {
+  Teacher.exists({ firebaseUID: req.headers.authorization }).then(result => {
+    if (result) {
+      Teacher.findOne({ firebaseUID: req.uid }).then(data => {
+        res.json({
+          name: data.name,
+          email: data.email
+        });
+      });
+    } else {
+      Student.findOne({ firebaseUID: req.headers.authorization }).then(data => {
+        res.json({
+          name: data.name,
+          rollno: data.rollno,
+          email: data.email
+        });
+      });
+    }
+  });
+});
 
 //gives the list of classes the teacher or student is currently enrolled in, classcode is given as authorization
+//get class data
 app.get("/api/getPartialClassData", (req, res) => {
   Class.exists({ _id: req.headers.authorization })
     .then(result => {
@@ -248,6 +286,7 @@ app.get("/api/getPartialClassData", (req, res) => {
     });
 });
 
+//get class data
 app.get("/api/getCompleteClassData", (req, res) => {
   Class.exists({ _id: req.headers.authorization })
     .then(result => {
@@ -264,6 +303,7 @@ app.get("/api/getCompleteClassData", (req, res) => {
     });
 });
 
+//new class post
 app.post("/api/newClassPost", (req, res) => {
   Class.exists({ _id: req.headers.authorization })
     .then(result => {
@@ -288,12 +328,13 @@ app.post("/api/newClassPost", (req, res) => {
     });
 });
 
+//new work
 app.post("/api/newClassWork", authenticateToken, (req, res) => {
   Teacher.exists({ firebaseUID: req.uid }).then(result => {
     if (result) {
       Class.exists({ _id: req.body.currentClassCode })
-        .then(result => {
-          if (result) {
+        .then(result2 => {
+          if (result2) {
             Class.findOne({ _id: req.body.currentClassCode }, function(
               err,
               docs
@@ -321,15 +362,41 @@ app.post("/api/newClassWork", authenticateToken, (req, res) => {
                   // }
                 ]
               });
-              docs.save().then(result => {
-                Teacher.findOne({ firebaseUID: req.uid }, function(err, docs) {
-                  docs.works.unshift(result._id);
-                  docs.save().then(
-                    res.json({
-                      response: "newWorkAdded",
-                      id: result._id
-                    })
-                  );
+              docs.save().then(workResult => {
+                Teacher.findOne({ firebaseUID: req.uid }, function(
+                  err,
+                  teacherDocs
+                ) {
+                  teacherDocs.works.unshift({
+                    class: docs.className,
+                    title: req.body.title,
+                    dueDate: req.body.dueDate,
+                    classId: req.body.currentClassCode,
+                    workId: workResult.assignments[0]._id
+                  });
+                  teacherDocs.save().then(() => {
+                    docs.classStudents.forEach((item, index) => {
+                      Student.findOne({ _id: item.id }, function(
+                        err,
+                        studentDoc
+                      ) {
+                        studentDoc.works.unshift({
+                          class: docs.className,
+                          title: req.body.title,
+                          dueDate: req.body.dueDate,
+                          workId: workResult.assignments[0]._id,
+                          classId: req.body.currentClassCode,
+                          finished: "false"
+                        });
+                        studentDoc.save();
+                        if (index == docs.classStudents.length - 1)
+                          res.json({
+                            response: "newWorkAdded",
+                            id: workResult.assignments[0]._id
+                          });
+                      });
+                    });
+                  });
                 });
               });
             });
@@ -346,6 +413,7 @@ app.post("/api/newClassWork", authenticateToken, (req, res) => {
   });
 });
 
+//get work data
 app.get("/api/getWorkData", (req, res) => {
   let classCode = req.headers.authorization.split("/")[0];
   let temp = req.headers.authorization.split("/")[1];
@@ -377,6 +445,94 @@ app.get("/api/getWorkData", (req, res) => {
     });
 });
 
+app.get("/api/checkWorkDone", (req, res) => {
+  let classCode = req.headers.authorization.split("/")[0];
+  let temp = req.headers.authorization.split("/")[1];
+  let workCode = temp.split("#")[0];
+  let token = req.headers.authorization.split("#")[1];
+
+  admin
+    .auth()
+    .verifyIdToken(token)
+    .then(function(decodedToken) {
+      let uid = decodedToken.uid;
+      Student.exists({ firebaseUID: uid }).then(result => {
+        if (result) {
+          Student.findOne({ firebaseUID: uid })
+            .then(studentData => {
+              studentData.works.forEach((item, index) => {
+                if (item.workId == workCode) {
+                  if (item.finished == "true")
+                    res.json({
+                      message: "yes"
+                    });
+                  else
+                    res.json({
+                      message: "no"
+                    });
+                }
+              });
+            })
+            .catch(err => console.log(err));
+        } else res.send("couldnt verify");
+      });
+    })
+    .catch(err => console.log(err));
+});
+
+//submit work
+app.post("/api/submitWork", authenticateToken, (req, res) => {
+  Student.exists({ firebaseUID: req.uid }).then(result => {
+    if (result) {
+      Class.exists({ _id: req.body.currentClassCode })
+        .then(result2 => {
+          if (result2) {
+            Class.findOne({ _id: req.body.currentClassCode }, function(
+              err,
+              docs
+            ) {
+              docs.assignments.forEach((item, index) => {
+                if (item._id == req.body.workCode) {
+                  item.submissions.push({
+                    studentFirebaseId: req.uid,
+                    submittedOn: new Date().toLocaleString("en-US", {
+                      timeZone: "Asia/Kolkata"
+                    }),
+                    fileUrl: req.body.fileUrl
+                  });
+                }
+              });
+              docs.save().then(() => {
+                Student.findOne({ firebaseUID: req.uid }, function(
+                  err,
+                  studentDocs
+                ) {
+                  studentDocs.works.forEach((item, index) => {
+                    if (item.workId == req.body.workCode) {
+                      item.finished = "true";
+                    }
+                  });
+                  studentDocs.save().then(
+                    res.json({
+                      message: "workSubmitted"
+                    })
+                  );
+                });
+              });
+            });
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      res.json({
+        message: "notStudent"
+      });
+    }
+  });
+});
+
 //------------------- calendar events ---------------------//
 
 app.get("/api/events", authenticateToken, (req, res) => {
@@ -399,6 +555,26 @@ app.get("/api/events", authenticateToken, (req, res) => {
         });
       });
     }
+  });
+});
+//--------------attendance api-----------------------//
+app.get("/api/readData", (req, res) => {
+  fs.readFile("markA.json", "utf8", function(err, data) {
+    if (err) console.log(err);
+    else {
+      let attendance = JSON.parse(data);
+      console.log(data);
+      res.send(attendance);
+    }
+  });
+});
+
+app.post("/api/markattendance", (req, res) => {
+  console.log(req.body);
+  let data = JSON.stringify(req.body);
+  fs.writeFile("markA.json", data, "utf-8", function(err, data) {
+    if (err) throw err;
+    else console.log("Done!");
   });
 });
 

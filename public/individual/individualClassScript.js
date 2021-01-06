@@ -10,7 +10,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const storage = firebase.storage();
-let storageRef = storage.ref();
+const storageRef = storage.ref();
 
 function goto(to) {
   if (to == "c") window.location = "/c";
@@ -71,6 +71,10 @@ firebase.auth().onAuthStateChanged(function(user) {
         document.querySelector("#class-name").innerText = data.data.className;
         document.title = data.data.className + " | eBundle";
 
+        if (data.data.posts.length == 0) {
+          document.querySelector(".loading-bro2").style.display = "none";
+          document.querySelector(".no-post").style.display = "block";
+        }
         data.data.posts.forEach((item, index) => {
           let newDiv = document.createElement("div");
           newDiv.classList.add("post");
@@ -269,6 +273,7 @@ function uploadPost(url) {
           postContent.appendChild(link);
         }
         newDiv.appendChild(postContent);
+        document.querySelector(".no-post").style.display = "none";
 
         document
           .querySelector(".post")
@@ -360,3 +365,7 @@ function uploadWork(fileUrl) {
         });
     });
 }
+
+document.querySelector(".attendance").addEventListener("click", () => {
+  window.location = "/c/" + currentClassCode + "/attendance";
+});

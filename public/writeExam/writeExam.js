@@ -9,53 +9,27 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+let questions = [];
+
 firebase.auth().onAuthStateChanged(function(user) {
   if (!user) {
     window.location = "/account";
   } else {
-    console.log(user.email);
+    
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       questions = JSON.parse(xhttp.responseText);
+      }
+    };
+    xhttp.open("GET", "./questions.json", true);
+    xhttp.send();
+
     startButton.addEventListener("click", startExam);
   }
 });
 
 //------------questions-----------------//
-
-const questions = [
-  {
-    question: "What is 2 + 2?",
-    question_no: 1,
-    Options: [{ text: "4" }, { text: "22" }],
-    answer: "4"
-  },
-  {
-    question: "kudumbasree of geci",
-    question_no: 2,
-    Options: [
-      { text: "j k" },
-      { text: "annan" },
-      { text: "kuttoos" },
-      { text: "atta" }
-    ],
-    answer: "kuttoos"
-  },
-  {
-    question: "1 usd == __ inr",
-    question_no: 3,
-    Options: [
-      { text: "112" },
-      { text: "72" },
-      { text: "753" },
-      { text: "152" }
-    ],
-    answer: "72"
-  },
-  {
-    question: "What is 4 * 2?",
-    question_no: 4,
-    Options: [{ text: "6" }, { text: "8" }, { text: "10" }, { text: "42" }],
-    answer: "8"
-  }
-];
 
 let Answers = [];
 let Times = [];
