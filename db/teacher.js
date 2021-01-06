@@ -24,8 +24,19 @@ const teacherSchema = new Schema(
       // required : true
     },
     works: [
-      {
-        workid: {
+      {class: {
+          type: String
+        },
+        title: {
+          type: String
+        },
+        dueDate: {
+          type: String
+        },
+       classId: {
+          type: String
+        },
+        workId: {
           type: String
         }
       }

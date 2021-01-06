@@ -19,13 +19,29 @@ const studentSchema = new Schema(
       type: String,
       required: true
     },
+    rollno: {
+      type: String,
+      required: true
+    },
     college: {
       type: String
       // required : true
     },
     works: [
       {
-        workid: {
+        class: {
+          type: String
+        },
+        title: {
+          type: String
+        },
+        dueDate: {
+          type: String
+        },
+        workId: {
+          type: String
+        },
+        classId: {
           type: String
         },
         finished: {

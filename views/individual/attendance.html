@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Works | eBundle</title>
+    <title>Attendance | eBundle</title>
     <link rel="stylesheet" href="/common.css" />
-    <link rel="stylesheet" href="/works/workStyle.css" />
+    <link rel="stylesheet" href="/attendance/Style.css" />
   </head>
   <body>
     <nav class="menu" tabindex="0">
@@ -24,11 +24,15 @@
       </header>
       <hr />
       <ul>
-        <li tabindex="0" class="icon-classes" onclick="goto('c')">
+        <li
+          tabindex="0"
+          class="icon-classes current-active"
+          onclick="goto('c')"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 24 24"
-            fill="#949494"
+            fill="#3FFF52"
             width="18px"
             height="18px"
           >
@@ -38,7 +42,7 @@
             /></svg
           ><span>Classes</span>
         </li>
-        <li tabindex="0" class="icon-dashboard " onclick="goto('dashboard')">
+        <li tabindex="0" class="icon-dashboard" onclick="goto('dashboard')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewbox="0 0 24 24"
@@ -53,16 +57,12 @@
           </svg>
           <span>Dashboard</span>
         </li>
-        <li
-          tabindex="0"
-          class="icon-customers current-active"
-          onclick="goto('works')"
-        >
+        <li tabindex="0" class="icon-customers" onclick="goto('works')">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             enable-background="new 0 0 24 24"
             viewbox="0 0 24 24"
-            fill="#3FFF52"
+            fill="#949494"
             width="18px"
             height="18px"
           >
@@ -109,75 +109,22 @@
     <main>
       <section>
         <div class="content-header">
-          <h2 id="pageTitle"></h2>
+          <div class="left-content">
+            <h2>
+              Attendance
+            </h2>
+          </div>
+          <div class="right-content"></div>
         </div>
         <hr />
-        <div class="work-section">
-          <p class="work-type"></p>
-          <p class="work-due"></p>
-          <p class="work-desc"></p>
-          <a class="work-file" href="#" target="_blank">
-            File
-          </a>
+        <div class="attendance-sheet">
+          
         </div>
-        <div class="submitted hide">
-          <hr />
-          <h3 class="header">
-            You've already submitted this work.
-          </h3>
-          <a class="submit-file" href="#" target="_blank">
-            <p style="display:inline-block;">
-              Your File
-            </p>
-          </a>
-        </div>
-        <div class="submit-work hide" id="submitWorkTab">
-          <h3>
-            Your submission
-          </h3>
-          <input id="uploadSubmission" type="file" /> <br />
-          <progress
-            value="0"
-            max="100"
-            id="progressSubmission"
-            class="hide"
-          ></progress>
-          <div id="uploadMetricsSubmission" class="hide">
-            <span id="uploadedSizeSubmission"></span>/
-            <span id="totalSizeSubmission"></span>
-          </div>
-          <button id="newSubmissionButton">
-            Upload
-          </button>
-          <p style="color:red;display:none;" class="error">
-            Please choose a file!
-          </p>
-          <p style="color:black;display:none;" class="creating">
-            Uploading...
-          </p>
-        </div>
-          <h3 class="all-head hide">
-              All Submissions
-            </h3>
-          <table class="hide">
-            <tr>
-              <th>Name</th>
-              <th>RollNo</th>
-              <th>Submitted On</th>
-              <th>Submission</th>
-            </tr>
-          </table>
       </section>
     </main>
-    <!--     <main>
-      <h1>
-      </h1>
-      <section id="classes">
-      </section>
-    </main> -->
+
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-storage.js"></script>
-    <script src="/works/workScript.js" defer></script>
+    <script src="/attendance/Script.js" defer></script>
   </body>
 </html>

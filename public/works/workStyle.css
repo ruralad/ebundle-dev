@@ -1,10 +1,10 @@
-.work-section{
-  margin : 20px;
+.work-section {
+  margin: 20px;
 }
-.work-type{
-  opacity : .6;
+.work-type {
+  opacity: 0.6;
 }
-.work-file{
+.work-file {
   width: 80px;
   height: 30px;
   border: 1px solid #b0b0b0;
@@ -14,15 +14,126 @@
   align-items: center;
   justify-content: center;
   margin: 0 0 10px 0;
-  text-decoration : none;
+  text-decoration: none;
 }
-.work-due::before{
-  content:"Due Date : " ;
-  font-weight : normal;
-  display : inline;
+.work-due::before {
+  content: "Due Date : ";
+  font-weight: normal;
+  display: inline;
 }
-.work-due{
-  display : none;
-  font-weight : bold;
-  
+.work-due {
+  display: none;
+  font-weight: bold;
+}
+.submit-work {
+  background-color: #F3F3F3;
+  width: auto;
+}
+
+.submit-work h3 {
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+input[type="file"] {
+  position: relative;
+  top: 6px;
+  left: 0px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  color: rgb(153, 153, 153);
+  margin-left: 20px;
+}
+button {
+  width: 90px;
+  height: 25px;
+  border-radius: 5px;
+
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  color: black;
+  font-size: 15px;
+  cursor: pointer;
+  background: #3FFF52;
+  border: none;
+  transition: all 0.3s ease-out;
+}
+.creating,
+.error {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+#uploadMetricsSubmission {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.create-form button:active {
+  transform: scale(1.1);
+}
+.hide {
+  display: none;
+}
+.submitted hr{
+  margin-left : -20px;
+}
+.submitted{
+  padding-left : 20px;
+}
+.header {
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  color: #f35626;
+  background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-animation: hue 10s infinite linear;
+}
+
+@-webkit-keyframes hue {
+  from {
+    -webkit-filter: hue-rotate(0deg);
+  }
+  to {
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+
+.submit-file{
+  width: 80px;
+  height: 30px;
+  border: 1px solid #b0b0b0;
+  border-radius: 5px;
+
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+.submit-file *{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+  margin-left:20px;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #F3F3F3;
+}
+
+.all-head{
+  text-decoration : underline;
+  margin-top:40px;
+  margin-left:20px;
+  margin-bottom:20px;
 }

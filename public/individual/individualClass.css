@@ -415,3 +415,24 @@ input[type="time"] {
 #worksList li a:hover{
   text-decoration : underline;
 }
+.attendance{
+  margin-top:20px;
+  border : 1px solid white;
+  background-color : #F3F3F3;
+  height:40px;
+  cursor:pointer;
+  display:flex;
+  align-items : center;
+  justify-content:center;
+  transition : all .3s ease-out;
+}
+.attendance p{
+  padding: 0 15px 0 15px;
+}
+.attendance:hover{
+  transform : scale(1.1);
+}
+.no-post p {
+  margin-top:35px;
+  margin-left:30px;
+}

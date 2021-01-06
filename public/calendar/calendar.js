@@ -52,10 +52,10 @@ function Eventcalendar(data) {
               var dateStr = data[i].createdDate;
               console.log(dateStr);
               var ti = data[i].title;
-              var date = new Date(dateStr+ "T00:00:00"); // will be in local time
+              var date = new Date(dateStr); // will be in local time
               var endStr = data[i].end;
               console.log(endStr);
-              var edate = new Date(endStr+ "T00:00:00"); // will be in local time
+              var edate = new Date(endStr); // will be in local time
               var urls = data[i].fileUrl;
               if (!isNaN(date.valueOf())) {
                 // valid?

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Works | eBundle</title>
     <link rel="stylesheet" href="/common.css" />
-    <link rel="stylesheet" href="/works/workStyle.css" />
+    <link rel="stylesheet" href="/todo/todoStyle.css" />
   </head>
   <body>
     <nav class="menu" tabindex="0">
@@ -109,64 +109,40 @@
     <main>
       <section>
         <div class="content-header">
-          <h2 id="pageTitle"></h2>
+          <h2>
+            Works
+          </h2>
         </div>
         <hr />
-        <div class="work-section">
-          <p class="work-type"></p>
-          <p class="work-due"></p>
-          <p class="work-desc"></p>
-          <a class="work-file" href="#" target="_blank">
-            File
-          </a>
-        </div>
-        <div class="submitted hide">
-          <hr />
-          <h3 class="header">
-            You've already submitted this work.
-          </h3>
-          <a class="submit-file" href="#" target="_blank">
-            <p style="display:inline-block;">
-              Your File
-            </p>
-          </a>
-        </div>
-        <div class="submit-work hide" id="submitWorkTab">
-          <h3>
-            Your submission
-          </h3>
-          <input id="uploadSubmission" type="file" /> <br />
-          <progress
-            value="0"
-            max="100"
-            id="progressSubmission"
-            class="hide"
-          ></progress>
-          <div id="uploadMetricsSubmission" class="hide">
-            <span id="uploadedSizeSubmission"></span>/
-            <span id="totalSizeSubmission"></span>
-          </div>
-          <button id="newSubmissionButton">
-            Upload
+        <div class="tab">
+          <button class="tablinks" onclick="openCity(event, 'pending')">
+            Pending
           </button>
-          <p style="color:red;display:none;" class="error">
-            Please choose a file!
-          </p>
-          <p style="color:black;display:none;" class="creating">
-            Uploading...
-          </p>
+          <button class="tablinks" onclick="openCity(event, 'completed')">
+            Completed
+          </button>
+          <button class="tablinks" onclick="openCity(event, 'all')">
+            All Works
+          </button>
         </div>
-          <h3 class="all-head hide">
-              All Submissions
-            </h3>
-          <table class="hide">
-            <tr>
-              <th>Name</th>
-              <th>RollNo</th>
-              <th>Submitted On</th>
-              <th>Submission</th>
-            </tr>
-          </table>
+
+        <!-- Tab content -->
+        <div class="all hide">
+          <div id="pending" class="tabcontent">
+            <h3 id="pendingh3">Pending</h3>
+            <table id="pendingTable"></table>
+          </div>
+
+          <div id="completed" class="tabcontent hide">
+            <h3 id="completedh3">Completed</h3>
+            <table id="completedTable"></table>
+          </div>
+
+          <div id="all" class="tabcontent hide">
+            <h3 id="allh3">All Works</h3>
+            <table id="allTable"></table>
+          </div>
+        </div>
       </section>
     </main>
     <!--     <main>
@@ -177,7 +153,6 @@
     </main> -->
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.1.1/firebase-storage.js"></script>
-    <script src="/works/workScript.js" defer></script>
+    <script src="/todo/todoScript.js" defer></script>
   </body>
 </html>
